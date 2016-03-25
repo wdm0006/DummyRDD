@@ -130,4 +130,6 @@ Implemented functions are:
  * mapValues()
  * flatMapValues()
  * foreachPartition()
+ * zipWithIndex()
+ * zip()
  

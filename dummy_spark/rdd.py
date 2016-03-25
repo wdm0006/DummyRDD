@@ -376,10 +376,12 @@ class RDD(object):
         raise NotImplementedError
 
     def zip(self, other):
-        raise NotImplementedError
+        self._jrdd = list(zip(self._jrdd, other))
+        return self
 
     def zipWithIndex(self):
-        raise NotImplementedError
+        self._jrdd = list(enumerate(self._jrdd))
+        return self
 
     def zipWithUniqueId(self):
         raise NotImplementedError
