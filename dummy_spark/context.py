@@ -45,7 +45,7 @@ class jvm(object):
                 secret_key = self.hc.get('fs.s3n.awsSecretAccessKey')
                 conn = tinys3.Connection(access_key, secret_key)
                 file = conn.get(key_name, bucket_name)
-                return file.content.split('\n')
+                return file.content.decode('utf-8').split('\n')
             else:
                 raise Exception('Need TinyS3 to use s3 files')
         else:
