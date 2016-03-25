@@ -73,12 +73,12 @@ class RDD(object):
         return None
 
     def map(self, f, preservesPartitioning=False):
-        self._jrdd = list(map(f, self._jrdd))
-        return self
+        data = list(map(f, self._jrdd))
+        return RDD(data, self.ctx)
 
     def flatMap(self, f, preservesPartitioning=False):
-        self._jrdd = [item for sl in map(f, self._jrdd) for item in sl]
-        return self
+        data = [item for sl in map(f, self._jrdd) for item in sl]
+        return RDD(data, self.ctx)
 
     def mapPartitions(self, f, preservesPartitioning=False):
         return self.map(f, preservesPartitioning=preservesPartitioning)
@@ -90,12 +90,12 @@ class RDD(object):
         return 1
 
     def filter(self, f):
-        self._jrdd = list(filter(f, self._jrdd))
-        return self
+        data = list(filter(f, self._jrdd))
+        return RDD(data, self.ctx)
 
     def distinct(self, numPartitions=None):
-        self._jrdd = list(set(self._jrdd))
-        return self
+        data = list(set(self._jrdd))
+        return RDD(data, self.ctx)
 
     def sample(self, withReplacement, fraction, seed=None):
         assert fraction >= 0.0, "Negative fraction value: %s" % fraction
@@ -153,23 +153,23 @@ class RDD(object):
         return self.union(other)
 
     def repartitionAndSortWithinPartitions(self, numPartitions=None, partitionFunc=None, ascending=True, keyfunc=lambda x: x):
-        self._jrdd = sorted(self._jrdd, key=keyfunc, reverse=ascending)
-        return self
+        data = sorted(self._jrdd, key=keyfunc, reverse=ascending)
+        return RDD(data, self.ctx)
 
     def sortByKey(self, ascending=True, numPartitions=None, keyfunc=lambda x: x):
-        self._jrdd = sorted(self._jrdd, key=keyfunc, reverse=ascending)
-        return self
+        data = sorted(self._jrdd, key=keyfunc, reverse=ascending)
+        return RDD(data, self.ctx)
 
     def sortBy(self, keyfunc, ascending=True, numPartitions=None):
-        self._jrdd = sorted(self._jrdd, key=keyfunc, reverse=ascending)
-        return self
+        data = sorted(self._jrdd, key=keyfunc, reverse=ascending)
+        return RDD(data, self.ctx)
 
     def glom(self):
         return self._jrdd
 
     def cartesian(self, other):
-        self._jrdd = list(itertools.product(self._jrdd, other))
-        return self
+        data = list(itertools.product(self._jrdd, other))
+        return RDD(data, self.ctx)
 
     def groupBy(self, f, numPartitions=None):
         return self.map(lambda x: (f(x), x)).groupByKey(numPartitions)
@@ -339,8 +339,8 @@ class RDD(object):
     def groupByKey(self, numPartitions=None):
         keys = {x[0] for x in self._jrdd}
         out = {k: ResultIterable([x for x in self._jrdd if x[0] == k]) for k in keys}
-        self._jrdd = list(out.items())
-        return self
+        data = list(out.items())
+        return RDD(data, self.ctx)
 
     def flatMapValues(self, f):
         flat_map_fn = lambda kv: ((kv[0], x) for x in f(kv[1]))
@@ -376,12 +376,12 @@ class RDD(object):
         raise NotImplementedError
 
     def zip(self, other):
-        self._jrdd = list(zip(other, self._jrdd))
-        return self
+        data = list(zip(other, self._jrdd))
+        return RDD(data, self.ctx)
 
     def zipWithIndex(self):
-        self._jrdd = [(b, a) for a, b in list(enumerate(self._jrdd))]
-        return self
+        data = [(b, a) for a, b in list(enumerate(self._jrdd))]
+        return RDD(data, self.ctx)
 
     def zipWithUniqueId(self):
         raise NotImplementedError
