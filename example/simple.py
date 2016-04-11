@@ -65,6 +65,7 @@ print('\nforEachPartition()')
 rdd.foreachPartition(lambda x: print('partition: ' + str(x)))
 
 # reducebykey
+print('\nReduceByKey')
 rdd = sc.parallelize([(0, 'A'), (0, 'A'), (1, 'C')])
 rdd = rdd.reduceByKey(lambda a, b: a)
 print(rdd)

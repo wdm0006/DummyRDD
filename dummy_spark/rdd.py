@@ -298,9 +298,8 @@ class RDD(object):
         raise NotImplementedError
 
     def reduceByKey(self, func, numPartitions=None):
-
-        data = list(toolz.reduceby(0, func, self._jrdd).items())
-
+        data = toolz.reduceby(0, func, self._jrdd)
+        data = [v for _, v in data.items()]
         return RDD(data, self.ctx)
 
     def reduceByKeyLocally(self, func):
