@@ -1,6 +1,7 @@
 import uuid
 import random
 import itertools
+import toolz
 from dummy_spark.resultsiterable import ResultIterable
 
 __author__ = 'willmcginnis'
@@ -297,7 +298,10 @@ class RDD(object):
         raise NotImplementedError
 
     def reduceByKey(self, func, numPartitions=None):
-        raise NotImplementedError
+
+        data = list(toolz.reduceby(0, func, self._jrdd).items())
+
+        return RDD(data, self.ctx)
 
     def reduceByKeyLocally(self, func):
         raise NotImplementedError
