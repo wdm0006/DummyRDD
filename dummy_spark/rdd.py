@@ -1,7 +1,9 @@
-import uuid
-import random
+# -*- coding: utf-8 -*-
+
 import itertools
-import toolz
+import random
+import uuid
+
 from dummy_spark.resultsiterable import ResultIterable
 
 __author__ = 'willmcginnis'

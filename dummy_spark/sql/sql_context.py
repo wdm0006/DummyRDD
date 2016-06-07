@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'willmcginnis'
 
 
@@ -87,4 +89,3 @@ class SQLContext(object):
     @property
     def read(self):
         raise NotImplementedError
-
