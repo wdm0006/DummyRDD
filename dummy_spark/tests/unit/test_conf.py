@@ -34,5 +34,40 @@ class SparkConfTests (unittest.TestCase):
 
     def test_set_executor_env1(self):
         conf = SparkConf()
-        conf.setExecutorEnv(self.RANDOM_KEY, self.RANDOM_VALUE)
+        conf.setExecutorEnv(key=self.RANDOM_KEY, value=self.RANDOM_VALUE)
         self.assertEquals(conf.get(self.RANDOM_KEY), self.RANDOM_VALUE)
+
+    def test_set_executor_env2(self):
+        conf = SparkConf()
+        conf.setExecutorEnv(
+            key=self.RANDOM_KEY,
+            value=self.RANDOM_VALUE,
+            pairs=[(self.RANDOM_KEY2, self.RANDOM_VALUE2)]
+        )
+        self.assertEquals(conf.get(self.RANDOM_KEY), self.RANDOM_VALUE)
+        self.assertEquals(conf.get(self.RANDOM_KEY2), self.RANDOM_VALUE2)
+
+    def test_set_all(self):
+        conf = SparkConf()
+        conf.setAll(
+            pairs=[(self.RANDOM_KEY, self.RANDOM_VALUE),
+                   (self.RANDOM_KEY2, self.RANDOM_VALUE2)]
+        )
+        self.assertEquals(conf.get(self.RANDOM_KEY), self.RANDOM_VALUE)
+        self.assertEquals(conf.get(self.RANDOM_KEY2), self.RANDOM_VALUE2)
+
+    def test_contains(self):
+        conf = SparkConf()
+        conf.setAll(
+            pairs=[(self.RANDOM_KEY, self.RANDOM_VALUE),
+                   (self.RANDOM_KEY2, self.RANDOM_VALUE2)]
+        )
+        self.assertTrue(conf.contains(self.RANDOM_KEY))
+        self.assertTrue(conf.contains(self.RANDOM_KEY2))
+
+    def test_get_all(self):
+        conf = SparkConf()
+        pairs = [(self.RANDOM_KEY, self.RANDOM_VALUE),
+               (self.RANDOM_KEY2, self.RANDOM_VALUE2)]
+        conf.setAll(pairs)
+        self.assertEquals(sorted(conf.getAll()), sorted(pairs))
