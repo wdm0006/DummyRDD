@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import os
 import random
 
 from dummy_spark import SparkContext, SparkConf
 from dummy_spark.sql import SQLContext
-from dummy_spark import RDD
 
 __author__ = 'willmcginnis'
 
