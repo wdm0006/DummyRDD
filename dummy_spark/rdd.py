@@ -300,21 +300,8 @@ class RDD(object):
         raise NotImplementedError
 
     def reduceByKey(self, func, numPartitions=None):
-        d = {}
-        keys = []
-        for kv in self._jrdd:
-            key = kv[0]
-            value = kv[1]
-            if key in d:
-                d[key].append(value)
-            else:
-                keys.append(key)
-                d[key] = [value]
-
-        data = []
-        for key in keys:
-            data.append((key, reduce(func, d[key])))
-
+        keys = {kv[0] for kv in self._jrdd}
+        data = [(key, reduce(func, [kv[1] for kv in self._jrdd if kv[0] == key])) for key in keys]
         return RDD(data, self.ctx)
 
     def reduceByKeyLocally(self, func):
