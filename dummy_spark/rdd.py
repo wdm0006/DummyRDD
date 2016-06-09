@@ -4,7 +4,7 @@ import itertools
 import random
 import uuid
 
-from dummy_spark.resultsiterable import ResultIterable
+from resultsiterable import ResultIterable
 
 __author__ = 'willmcginnis'
 

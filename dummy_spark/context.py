@@ -7,7 +7,7 @@ import sys
 
 from threading import Lock
 
-from dummy_spark import RDD
+from rdd import RDD
 
 try:
     import tinys3
