@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import itertools
 import random
 import uuid
 
@@ -139,10 +138,8 @@ class RDD(object):
         return RDD(self._jrdd + other._jrdd, self.ctx)
 
     def intersection(self, other):
-        return self.map(lambda v: (v, None)) \
-            .cogroup(other.map(lambda v: (v, None))) \
-            .filter(lambda k_vs: all(k_vs[1])) \
-            .keys()
+        data = [item for item in self._jrdd if item in other._jrdd]
+        return RDD(data, self.ctx)
 
     def _reserialize(self, serializer=None):
         return self
@@ -168,7 +165,7 @@ class RDD(object):
         return self._jrdd
 
     def cartesian(self, other):
-        data = list(itertools.product(self._jrdd, other))
+        data = [(t, u) for t in self._jrdd for u in other._jrdd]
         return RDD(data, self.ctx)
 
     def groupBy(self, f, numPartitions=None):
@@ -340,7 +337,7 @@ class RDD(object):
     # TODO: support variant with custom partitioner
     def groupByKey(self, numPartitions=None):
         keys = {x[0] for x in self._jrdd}
-        out = {k: ResultIterable([x for x in self._jrdd if x[0] == k]) for k in keys}
+        out = {k: ResultIterable([x[1] for x in self._jrdd if x[0] == k]) for k in keys}
         data = list(out.items())
         return RDD(data, self.ctx)
 
@@ -355,9 +352,19 @@ class RDD(object):
     def groupWith(self, other, *others):
         raise NotImplementedError
 
-    # TODO: add variant with custom parittioner
     def cogroup(self, other, numPartitions=None):
-        raise NotImplementedError
+        vs = {x[0] for x in self._jrdd}
+        us = {x[0] for x in other._jrdd}
+        keys = vs.union(us)
+        data = [
+            (
+                k,
+                ([v[1] for v in self._jrdd if v[0] == k]),
+                ([u[1] for u in other._jrdd if u[0] == k])
+            )
+            for k in keys
+        ]
+        return RDD(data, self.ctx)
 
     def sampleByKey(self, withReplacement, fractions, seed=None):
         raise NotImplementedError

@@ -150,6 +150,56 @@ class RDDTests (unittest.TestCase):
                 rdd = rdd1.union(rdd2)
                 self.assertEquals(sorted(rdd.collect()), sorted(l1+l2))
 
+    def test_intersection(self):
+        for start1, stop1, step1 in self.TEST_RANGES:
+            for start2, stop2, step2 in self.TEST_RANGES:
+                l1 = range(start1, stop1, step1)
+                l2 = range(start2, stop2, step2)
+                rdd1 = RDD(l1, self.SPARK_CONTEXT)
+                rdd2 = RDD(l2, self.SPARK_CONTEXT)
+                rdd = rdd1.intersection(rdd2)
+                self.assertEquals(sorted(rdd.collect()), sorted([x for x in l1 if x in l2]))
+
+    def test_group_by_key(self):
+        l = [(1, 1), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3)]
+        rdd = RDD(l, self.SPARK_CONTEXT)
+        rdd = rdd.groupByKey()
+        r = rdd.collect()
+        r = [(kv[0], list(kv[1])) for kv in r]
+        self.assertEquals(sorted(r), sorted([(1, [1]), (2, [1, 2]), (3, [1, 2, 3])]))
+
+    def test_reduce_by_key(self):
+        l = [(1, 1), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3)]
+        rdd = RDD(l, self.SPARK_CONTEXT)
+        rdd = rdd.reduceByKey(lambda a, b: a + b)
+        self.assertEquals(sorted(rdd.collect()), sorted([(1, 1), (2, 3), (3, 6)]))
+
+    def test_cartesian(self):
+        for start1, stop1, step1 in self.TEST_RANGES:
+            for start2, stop2, step2 in self.TEST_RANGES:
+                l1 = range(start1, stop1, step1)
+                l2 = range(start2, stop2, step2)
+                rdd1 = RDD(l1, self.SPARK_CONTEXT)
+                rdd2 = RDD(l2, self.SPARK_CONTEXT)
+                rdd = rdd1.cartesian(rdd2)
+                r = rdd.collect()
+                self.assertEquals(len(r), len(l1) * len(l2))
+                for t, u in r:
+                    self.assertTrue(t in l1)
+                    self.assertTrue(u in l2)
+
+    def test_cogroup(self):
+        l1 = [(1, 1), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3)]
+        l2 = [(2, 10), (2, 20), (3, 10), (3, 20), (3, 30), (4, 40)]
+        rdd1 = RDD(l1, self.SPARK_CONTEXT)
+        rdd2 = RDD(l2, self.SPARK_CONTEXT)
+        rdd = rdd1.cogroup(rdd2)
+        l = rdd.collect()
+        self.assertEquals(
+            sorted(l),
+            sorted([(1, [1], []), (2, [1, 2], [10, 20]), (3, [1, 2, 3], [10, 20, 30]), (4, [], [40])])
+        )
+
     def test_word_count_1(self):
 
         lines = [
