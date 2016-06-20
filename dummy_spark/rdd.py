@@ -76,7 +76,7 @@ class RDD(object):
         return None
 
     def map(self, f, preservesPartitioning=False):
-        data = list(map(f, self._jrdd))
+        data = map(f, self._jrdd)
         return RDD(data, self.ctx)
 
     def flatMap(self, f, preservesPartitioning=False):
@@ -93,11 +93,11 @@ class RDD(object):
         return 1
 
     def filter(self, f):
-        data = list(filter(f, self._jrdd))
+        data = filter(f, self._jrdd)
         return RDD(data, self.ctx)
 
     def distinct(self, numPartitions=None):
-        data = list(set(self._jrdd))
+        data = set(self._jrdd)
         return RDD(data, self.ctx)
 
     def sample(self, withReplacement, fraction, seed=None):
@@ -106,13 +106,13 @@ class RDD(object):
         if seed is not None:
             random.seed(seed)
 
+        idx_list = range(len(self._jrdd))
         if withReplacement:
-            out = [self._jrdd[random.choice(list(range(len(self._jrdd))))] for _ in int(fraction) * len(self._jrdd)]
+            data = [self._jrdd[random.choice(idx_list)] for _ in xrange(int(fraction * len(self._jrdd)))]
         else:
-            idx_list = list(range(len(self._jrdd)))
             random.shuffle(idx_list)
-            out = [self._jrdd[idx] for idx in idx_list[:int(fraction) * len(self._jrdd)]]
-        return out
+            data = [self._jrdd[idx] for idx in idx_list[:int(fraction * len(self._jrdd))]]
+        return RDD(data, self.ctx)
 
     def randomSplit(self, weights, seed=None):
         pass
@@ -136,10 +136,7 @@ class RDD(object):
         raise NotImplementedError
 
     def union(self, other):
-        data = self._jrdd
-        data += other._jrdd
-        new_rdd = RDD(data, self.ctx)
-        return new_rdd
+        return RDD(self._jrdd + other._jrdd, self.ctx)
 
     def intersection(self, other):
         return self.map(lambda v: (v, None)) \
