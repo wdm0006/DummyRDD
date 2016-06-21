@@ -1,6 +1,15 @@
 DummyRDD
 ========
 
+Contributors
+------------
+
+ * [Henrique Souza](https://github.com/htssouza)
+ * [Will McGinnis](https://gitbhub.com/wdm0006)
+ 
+Overview
+--------
+
 A test class that walks like and RDD, talks like an RDD but is just a list.
 
 Contains 3 primary classes:
@@ -25,7 +34,7 @@ Currently there is no support for the dataframe api, or for that matter most fea
 still a work in progress.
 
 Example
-=======
+-------
 
 A quick example:
 
