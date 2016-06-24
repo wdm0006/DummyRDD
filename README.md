@@ -1,6 +1,9 @@
 DummyRDD
 ========
 
+[![Coverage Status](https://coveralls.io/repos/github/wdm0006/DummyRDD/badge.svg?branch=master)](https://coveralls.io/github/wdm0006/DummyRDD?branch=master)
+[![Build Status](https://travis-ci.org/wdm0006/DummyRDD.svg?branch=master)](https://travis-ci.org/wdm0006/DummyRDD)
+
 Contributors
 ------------
 
