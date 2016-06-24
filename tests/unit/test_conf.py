@@ -35,6 +35,8 @@ class SparkConfTests (unittest.TestCase):
         conf.set(self.RANDOM_KEY, self.RANDOM_VALUE)
         conf.setIfMissing(self.RANDOM_KEY, self.RANDOM_VALUE2)
         self.assertEquals(conf.get(self.RANDOM_KEY), self.RANDOM_VALUE)
+        conf.setIfMissing(self.RANDOM_KEY2, self.RANDOM_VALUE2)
+        self.assertEquals(conf.get(self.RANDOM_KEY2), self.RANDOM_VALUE2)
 
     def test_set_executor_env1(self):
         conf = SparkConf()
@@ -75,3 +77,7 @@ class SparkConfTests (unittest.TestCase):
                (self.RANDOM_KEY2, self.RANDOM_VALUE2)]
         conf.setAll(pairs)
         self.assertEquals(sorted(conf.getAll()), sorted(pairs))
+
+    def test_to_debug_string(self):
+        conf = SparkConf()
+        self.assertEquals(conf.toDebugString(), SparkConf.DEBUG_STRING)
