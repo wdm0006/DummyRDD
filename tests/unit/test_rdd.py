@@ -50,9 +50,9 @@ class RDDTests (unittest.TestCase):
         for start, stop, step in self.TEST_RANGES:
             l1 = range(start, stop, step)
             l2 = map(RDDTests.square, l1)
-            rdd = RDD(l1, self.SPARK_CONTEXT)
+            rdd = RDD(list(l1), self.SPARK_CONTEXT)
             rdd = rdd.map(RDDTests.square)
-            self.assertEquals(rdd.collect(), l2)
+            self.assertEquals(rdd.collect(), list(l2))
 
     @staticmethod
     def triplicate(x):
@@ -65,9 +65,9 @@ class RDDTests (unittest.TestCase):
             l3 = []
             for sl in l2:
                 l3.extend(sl)
-            rdd = RDD(l1, self.SPARK_CONTEXT)
+            rdd = RDD(list(l1), self.SPARK_CONTEXT)
             rdd = rdd.flatMap(RDDTests.triplicate)
-            self.assertEquals(rdd.collect(), l3)
+            self.assertEquals(rdd.collect(), list(l3))
 
     @staticmethod
     def is_square(x):
@@ -77,9 +77,9 @@ class RDDTests (unittest.TestCase):
         for start, stop, step in self.TEST_RANGES:
             l1 = range(start, stop, step)
             l2 = filter(RDDTests.is_square, l1)
-            rdd = RDD(l1, self.SPARK_CONTEXT)
+            rdd = RDD(list(l1), self.SPARK_CONTEXT)
             rdd = rdd.filter(RDDTests.is_square)
-            self.assertEquals(rdd.collect(), l2)
+            self.assertEquals(rdd.collect(), list(l2))
 
     @staticmethod
     def return_one(x):
@@ -88,7 +88,7 @@ class RDDTests (unittest.TestCase):
     def test_distinct(self):
         for start, stop, step in self.TEST_RANGES:
             l = range(start, stop, step)
-            rdd = RDD(l, self.SPARK_CONTEXT)
+            rdd = RDD(list(l), self.SPARK_CONTEXT)
             rdd = rdd.map(RDDTests.return_one)
             rdd = rdd.distinct()
             if len(l) > 0:
@@ -99,7 +99,7 @@ class RDDTests (unittest.TestCase):
     def test_sample_with_replacement(self):
         for start, stop, step in self.TEST_RANGES:
             l = range(start, stop, step)
-            rdd = RDD(l, self.SPARK_CONTEXT)
+            rdd = RDD(list(l), self.SPARK_CONTEXT)
             sample = rdd.sample(True, self.SAMPLE_FRACTION).collect()
             self.assertEquals(len(sample), int(len(l) * self.SAMPLE_FRACTION))
             for item in sample:
@@ -108,7 +108,7 @@ class RDDTests (unittest.TestCase):
     def test_sample_with_replacement_with_seed(self):
         for start, stop, step in self.TEST_RANGES:
             l = range(start, stop, step)
-            rdd = RDD(l, self.SPARK_CONTEXT)
+            rdd = RDD(list(l), self.SPARK_CONTEXT)
             sample1 = rdd.sample(True, self.SAMPLE_FRACTION, self.SAMPLE_SEED).collect()
             sample2 = rdd.sample(True, self.SAMPLE_FRACTION, self.SAMPLE_SEED).collect()
             self.assertEquals(sorted(sample1), sorted(sample2))
@@ -120,7 +120,7 @@ class RDDTests (unittest.TestCase):
     def test_sample_without_replacement(self):
         for start, stop, step in self.TEST_RANGES:
             l = range(start, stop, step)
-            rdd = RDD(l, self.SPARK_CONTEXT)
+            rdd = RDD(list(l), self.SPARK_CONTEXT)
             sample = rdd.sample(False, self.SAMPLE_FRACTION).collect()
             self.assertEquals(len(sample), int(len(l) * self.SAMPLE_FRACTION))
             self.assertEquals(sorted(l), sorted(set(l)))
@@ -130,7 +130,7 @@ class RDDTests (unittest.TestCase):
     def test_sample_without_replacement_with_seed(self):
         for start, stop, step in self.TEST_RANGES:
             l = range(start, stop, step)
-            rdd = RDD(l, self.SPARK_CONTEXT)
+            rdd = RDD(list(l), self.SPARK_CONTEXT)
             sample1 = rdd.sample(False, self.SAMPLE_FRACTION, self.SAMPLE_SEED).collect()
             sample2 = rdd.sample(False, self.SAMPLE_FRACTION, self.SAMPLE_SEED).collect()
             self.assertEquals(sorted(sample1), sorted(sample2))
@@ -145,18 +145,18 @@ class RDDTests (unittest.TestCase):
             for start2, stop2, step2 in self.TEST_RANGES:
                 l1 = range(start1, stop1, step1)
                 l2 = range(start2, stop2, step2)
-                rdd1 = RDD(l1, self.SPARK_CONTEXT)
-                rdd2 = RDD(l2, self.SPARK_CONTEXT)
+                rdd1 = RDD(list(l1), self.SPARK_CONTEXT)
+                rdd2 = RDD(list(l2), self.SPARK_CONTEXT)
                 rdd = rdd1.union(rdd2)
-                self.assertEquals(sorted(rdd.collect()), sorted(l1+l2))
+                self.assertEquals(sorted(rdd.collect()), sorted(list(l1) + list(l2)))
 
     def test_intersection(self):
         for start1, stop1, step1 in self.TEST_RANGES:
             for start2, stop2, step2 in self.TEST_RANGES:
                 l1 = range(start1, stop1, step1)
                 l2 = range(start2, stop2, step2)
-                rdd1 = RDD(l1, self.SPARK_CONTEXT)
-                rdd2 = RDD(l2, self.SPARK_CONTEXT)
+                rdd1 = RDD(list(l1), self.SPARK_CONTEXT)
+                rdd2 = RDD(list(l2), self.SPARK_CONTEXT)
                 rdd = rdd1.intersection(rdd2)
                 self.assertEquals(sorted(rdd.collect()), sorted([x for x in l1 if x in l2]))
 
@@ -179,8 +179,8 @@ class RDDTests (unittest.TestCase):
             for start2, stop2, step2 in self.TEST_RANGES:
                 l1 = range(start1, stop1, step1)
                 l2 = range(start2, stop2, step2)
-                rdd1 = RDD(l1, self.SPARK_CONTEXT)
-                rdd2 = RDD(l2, self.SPARK_CONTEXT)
+                rdd1 = RDD(list(l1), self.SPARK_CONTEXT)
+                rdd2 = RDD(list(l2), self.SPARK_CONTEXT)
                 rdd = rdd1.cartesian(rdd2)
                 r = rdd.collect()
                 self.assertEquals(len(r), len(l1) * len(l2))

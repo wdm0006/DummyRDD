@@ -37,21 +37,21 @@ class SparkContextTests (unittest.TestCase):
     def test_range(self):
         ctx = SparkContext()
         for start, stop, step in self.TEST_RANGES:
-            l = range(start, stop, step)
+            l = list(range(start, stop, step))
             rdd = ctx.range(start, stop, step)
             self.assertEquals(l, rdd.collect())
 
     def test_parallelize_list(self):
         ctx = SparkContext()
         for start, stop, step in self.TEST_RANGES:
-            l = range(start, stop, step)
+            l = list(range(start, stop, step))
             rdd = ctx.parallelize(l)
             self.assertEquals(l, rdd.collect())
 
     def test_parallelize_set(self):
         ctx = SparkContext()
         for start, stop, step in self.TEST_RANGES:
-            l = range(start, stop, step)
+            l = list(range(start, stop, step))
             rdd = ctx.parallelize(set(l))
             self.assertEquals(sorted(l), sorted(rdd.collect()))
 
