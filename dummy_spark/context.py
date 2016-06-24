@@ -138,13 +138,13 @@ class SparkContext(object):
     def parallelize(self, c, numSlices=None):
         return RDD(c, self, None)
 
-    def pickleFile(self, name, minPartitions=None):
-        raise NotImplementedError
-
     def textFile(self, name, minPartitions=None, use_unicode=True):
         data = self._jsc.textFile(name)
         rdd = RDD(data, self, None)
         return rdd
+
+    def pickleFile(self, name, minPartitions=None):
+        raise NotImplementedError
 
     def wholeTextFiles(self, path, minPartitions=None, use_unicode=True):
         raise NotImplementedError
