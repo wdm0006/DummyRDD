@@ -5,6 +5,9 @@ __all__ = ['SparkConf']
 
 
 class SparkConf(object):
+
+    DEBUG_STRING = 'no string for dummy version'
+
     def __init__(self, loadDefaults=True, _jvm=None, _jconf=None):
         self.conf = {}
 
@@ -58,4 +61,4 @@ class SparkConf(object):
         return key in self.conf.keys()
 
     def toDebugString(self):
-        return 'no string for dummy version'
+        return self.DEBUG_STRING
