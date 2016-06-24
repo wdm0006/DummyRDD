@@ -66,3 +66,111 @@ class SparkContextTests (unittest.TestCase):
                 f.seek(0)
                 rdd = ctx.textFile(f.name)
                 self.assertEquals(l, rdd.collect())
+
+    def test_version(self):
+        ctx = SparkContext()
+        self.assertEquals(ctx.version, SparkContext.DUMMY_VERSION)
+
+    def test_with_block(self):
+        with SparkContext():
+            pass
+        self.assertTrue(True)
+
+    def test_add_py_file(self):
+        with SparkContext() as ctx:
+            ctx.addPyFile(__file__)
+        self.assertTrue(True)
+
+    def test_hadoop_config(self):
+        ctx = SparkContext()
+        jvm = ctx._jsc
+        hc = jvm.hadoopConfiguration()
+        hc.set('key', 'value')
+        self.assertEquals(hc.get('key'), 'value')
+
+    def test_not_implemented_methods(self):
+        ctx = SparkContext()
+
+        with self.assertRaises(NotImplementedError):
+            ctx._checkpointFile(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx._dictToJavaMap(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx._getJavaStorageLevel(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.accumulator(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.addFile(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.binaryFiles(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.binaryRecords(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.broadcast(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.cancelAllJobs()
+
+        with self.assertRaises(NotImplementedError):
+            ctx.cancelJobGroup(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.clearFiles()
+
+        with self.assertRaises(NotImplementedError):
+            ctx.dump_profiles(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.getLocalProperty(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.hadoopFile(None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.hadoopRDD(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.newAPIHadoopFile(None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.newAPIHadoopRDD(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.pickleFile(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.runJob(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.sequenceFile(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.setCheckpointDir(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.setJobGroup(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.setLocalProperty(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.show_profiles()
+
+        with self.assertRaises(NotImplementedError):
+            ctx.sparkUser()
+
+        with self.assertRaises(NotImplementedError):
+            ctx.statusTracker()
+
+        with self.assertRaises(NotImplementedError):
+            ctx.union(None)
+
+        with self.assertRaises(NotImplementedError):
+            ctx.wholeTextFiles(None)

@@ -75,6 +75,8 @@ class SparkContext(object):
 
     PACKAGE_EXTENSIONS = ('.zip', '.egg', '.jar')
 
+    DUMMY_VERSION = 'dummy version'
+
     def __init__(self, master=None, appName=None, sparkHome=None, pyFiles=None, environment=None, batchSize=0, serializer=None, conf=None, gateway=None, jsc=None, profiler_cls=None):
         self._callsite = None
         SparkContext._ensure_initialized(self, gateway=gateway)
@@ -112,7 +114,7 @@ class SparkContext(object):
 
     @property
     def version(self):
-        return 'dummy version'
+        return self.DUMMY_VERSION
 
     @property
     def startTime(self):
@@ -142,6 +144,9 @@ class SparkContext(object):
         data = self._jsc.textFile(name)
         rdd = RDD(data, self, None)
         return rdd
+
+    def addPyFile(self, path):
+        sys.path.append(path)
 
     def pickleFile(self, name, minPartitions=None):
         raise NotImplementedError
@@ -190,9 +195,6 @@ class SparkContext(object):
 
     def clearFiles(self):
         raise NotImplementedError
-
-    def addPyFile(self, path):
-        sys.path.append(path)
 
     def setCheckpointDir(self, dirName):
         raise NotImplementedError
