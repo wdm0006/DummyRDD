@@ -10,7 +10,7 @@ With that in mind, we welcome and in fact would love some help.
 How to Contribute
 =================
 
-The preferred workflow to contribute to git-pandas is:
+The preferred workflow to contribute to DummyRDD is:
 
  1. Fork this repository into your own github account.
  2. Clone the fork on your account onto your local disk:
