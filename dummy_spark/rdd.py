@@ -2,8 +2,8 @@
 
 import random
 import uuid
-
-from resultsiterable import ResultIterable
+from functools import reduce
+from dummy_spark.resultsiterable import ResultIterable
 
 __author__ = 'willmcginnis'
 
@@ -82,7 +82,7 @@ class RDD(object):
         return None
 
     def map(self, f, preservesPartitioning=False):
-        data = map(f, self._jrdd)
+        data = list(map(f, self._jrdd))
         return RDD(data, self.ctx)
 
     def flatMap(self, f, preservesPartitioning=False):
@@ -96,7 +96,7 @@ class RDD(object):
         return 1
 
     def filter(self, f):
-        data = filter(f, self._jrdd)
+        data = list(filter(f, self._jrdd))
         return RDD(data, self.ctx)
 
     def distinct(self, numPartitions=None):
@@ -109,9 +109,9 @@ class RDD(object):
         if seed is not None:
             random.seed(seed)
 
-        idx_list = range(len(self._jrdd))
+        idx_list = list(range(len(self._jrdd)))
         if withReplacement:
-            data = [self._jrdd[random.choice(idx_list)] for _ in xrange(int(fraction * len(self._jrdd)))]
+            data = [self._jrdd[random.choice(idx_list)] for _ in list(range(int(fraction * len(self._jrdd))))]
         else:
             random.shuffle(idx_list)
             data = [self._jrdd[idx] for idx in idx_list[:int(fraction * len(self._jrdd))]]

@@ -2,17 +2,21 @@
 
 import unittest
 import uuid
-
+import sys
 from dummy_spark import SparkConf
 
 
 class SparkConfTests (unittest.TestCase):
-
-    RANDOM_KEY = str(uuid.uuid4().get_hex().upper()[0:6])
-    RANDOM_VALUE = str(uuid.uuid4().get_hex().upper()[0:6])
-
-    RANDOM_KEY2 = str(uuid.uuid4().get_hex().upper()[0:6])
-    RANDOM_VALUE2 = str(uuid.uuid4().get_hex().upper()[0:6])
+    if sys.version_info[0] == 2:
+        RANDOM_KEY = str(uuid.uuid4().get_hex().upper()[0:6])
+        RANDOM_VALUE = str(uuid.uuid4().get_hex().upper()[0:6])
+        RANDOM_KEY2 = str(uuid.uuid4().get_hex().upper()[0:6])
+        RANDOM_VALUE2 = str(uuid.uuid4().get_hex().upper()[0:6])
+    elif sys.version_info[0] == 3:
+        RANDOM_KEY = str(uuid.uuid4().hex.upper()[0:6])
+        RANDOM_VALUE = str(uuid.uuid4().hex.upper()[0:6])
+        RANDOM_KEY2 = str(uuid.uuid4().hex.upper()[0:6])
+        RANDOM_VALUE2 = str(uuid.uuid4().hex.upper()[0:6])
 
     def test_named_properties(self):
         conf = SparkConf()
