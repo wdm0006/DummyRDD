@@ -34,7 +34,7 @@ class RDD(object):
 
         self.ctx = ctx
         self.is_cached = True
-        self.name = 'dummpy-rdd'
+        self._name = 'dummpy-rdd'
 
         # not ported
 
@@ -43,18 +43,22 @@ class RDD(object):
         self._jrdd_deserializer = jrdd_deserializer
         self.partitioner = None
 
-    def _pickled(self):
-        raise NotImplementedError
-
     def id(self):
         return self._id
-
-    def __repr__(self):
-        return str(self._jrdd)
 
     @property
     def context(self):
         return self.ctx
+
+    def name(self):
+        return self._name
+
+    def setName(self, name):
+        self._name = name
+        return self
+
+    def __repr__(self):
+        return str(self._jrdd)
 
     def cache(self):
         return self
@@ -63,6 +67,9 @@ class RDD(object):
         return self
 
     def unpersist(self):
+        return self
+
+    def _reserialize(self, serializer=None):
         return self
 
     def checkpoint(self):
@@ -84,9 +91,6 @@ class RDD(object):
 
     def mapPartitions(self, f, preservesPartitioning=False):
         return self.map(f, preservesPartitioning=preservesPartitioning)
-
-    def mapPartitionsWithIndex(self, f, preservesPartitioning=False):
-        raise NotImplementedError
 
     def getNumPartitions(self):
         return 1
@@ -130,19 +134,12 @@ class RDD(object):
             out = [self._jrdd[idx] for idx in idx_list[:num]]
         return out
 
-    @staticmethod
-    def _computeFractionForSampleSize(sampleSizeLowerBound, total, withReplacement):
-        raise NotImplementedError
-
     def union(self, other):
         return RDD(self._jrdd + other._jrdd, self.ctx)
 
     def intersection(self, other):
         data = [item for item in self._jrdd if item in other._jrdd]
         return RDD(data, self.ctx)
-
-    def _reserialize(self, serializer=None):
-        return self
 
     def __add__(self, other):
         if not isinstance(other, RDD):
@@ -171,9 +168,6 @@ class RDD(object):
     def groupBy(self, f, numPartitions=None):
         return self.map(lambda x: (f(x), x)).groupByKey(numPartitions)
 
-    def pipe(self, command, env=None):
-        raise NotImplementedError
-
     def foreach(self, f):
         return self.map(f)
 
@@ -188,6 +182,114 @@ class RDD(object):
 
     def collect(self):
         return self._jrdd
+
+    def sum(self):
+        return sum(self._jrdd)
+
+    def count(self):
+        return len(self._jrdd)
+
+    def mean(self):
+        return float(sum(self._jrdd)) / len(self._jrdd)
+
+    def take(self, num):
+        return self._jrdd[:num]
+
+    def first(self):
+        return self._jrdd[0]
+
+    def isEmpty(self):
+        return len(self._jrdd) == 0
+
+    def reduceByKey(self, func, numPartitions=None):
+        keys = {kv[0] for kv in self._jrdd}
+        data = [(key, reduce(func, [kv[1] for kv in self._jrdd if kv[0] == key])) for key in keys]
+        return RDD(data, self.ctx)
+
+    # TODO: support variant with custom partitioner
+    def groupByKey(self, numPartitions=None):
+        keys = {x[0] for x in self._jrdd}
+        out = {k: ResultIterable([x[1] for x in self._jrdd if x[0] == k]) for k in keys}
+        data = list(out.items())
+        return RDD(data, self.ctx)
+
+    def flatMapValues(self, f):
+        flat_map_fn = lambda kv: ((kv[0], x) for x in f(kv[1]))
+        return self.flatMap(flat_map_fn, preservesPartitioning=True)
+
+    def mapValues(self, f):
+        map_values_fn = lambda kv: (kv[0], f(kv[1]))
+        return self.map(map_values_fn, preservesPartitioning=True)
+
+    def cogroup(self, other, numPartitions=None):
+        vs = {x[0] for x in self._jrdd}
+        us = {x[0] for x in other._jrdd}
+        keys = vs.union(us)
+        data = [
+            (
+                k,
+                ([v[1] for v in self._jrdd if v[0] == k]),
+                ([u[1] for u in other._jrdd if u[0] == k])
+            )
+            for k in keys
+        ]
+        return RDD(data, self.ctx)
+
+
+    def zip(self, other):
+        data = list(zip(other, self._jrdd))
+        return RDD(data, self.ctx)
+
+    def zipWithIndex(self):
+        data = [(b, a) for a, b in list(enumerate(self._jrdd))]
+        return RDD(data, self.ctx)
+
+    def _defaultReducePartitions(self):
+        return 1
+
+    def lookup(self, key):
+        return [x for x in self._jrdd if x[0] == key]
+
+    def countApprox(self, timeout, confidence=0.95):
+        return len(self._jrdd)
+
+    def sumApprox(self, timeout, confidence=0.95):
+        return sum(self._jrdd)
+
+    def meanApprox(self, timeout, confidence=0.95):
+        return float(sum(self._jrdd)) / len(self._jrdd)
+
+    def countApproxDistinct(self, relativeSD=0.05):
+        return len(set(self._jrdd))
+
+    def toLocalIterator(self):
+        for row in self._jrdd:
+            yield row
+
+    def max(self, key=None):
+        if key is None:
+            return max(self._jrdd)
+        else:
+            raise NotImplementedError
+
+    def min(self, key=None):
+        if key is None:
+            return min(self._jrdd)
+        else:
+            raise NotImplementedError
+
+    def _pickled(self):
+        raise NotImplementedError
+
+    def mapPartitionsWithIndex(self, f, preservesPartitioning=False):
+        raise NotImplementedError
+
+    @staticmethod
+    def _computeFractionForSampleSize(sampleSizeLowerBound, total, withReplacement):
+        raise NotImplementedError
+
+    def pipe(self, command, env=None):
+        raise NotImplementedError
 
     def reduce(self, f):
         raise NotImplementedError
@@ -204,32 +306,11 @@ class RDD(object):
     def treeAggregate(self, zeroValue, seqOp, combOp, depth=2):
         raise NotImplementedError
 
-    def max(self, key=None):
-        if key is None:
-            return max(self._jrdd)
-        else:
-            raise NotImplementedError
-
-    def min(self, key=None):
-        if key is None:
-            return min(self._jrdd)
-        else:
-            raise NotImplementedError
-
-    def sum(self):
-        return sum(self._jrdd)
-
-    def count(self):
-        return len(self._jrdd)
-
     def stats(self):
         raise NotImplementedError
 
     def histogram(self, buckets):
         raise NotImplementedError
-
-    def mean(self):
-        return float(sum(self._jrdd)) / len(self._jrdd)
 
     def variance(self):
         raise NotImplementedError
@@ -252,15 +333,6 @@ class RDD(object):
     def takeOrdered(self, num, key=None):
         raise NotImplementedError
 
-    def take(self, num):
-        return self._jrdd[:num]
-
-    def first(self):
-        return self._jrdd[0]
-
-    def isEmpty(self):
-        return len(self._jrdd) == 0
-
     def saveAsNewAPIHadoopDataset(self, conf, keyConverter=None, valueConverter=None):
         raise NotImplementedError
 
@@ -282,8 +354,6 @@ class RDD(object):
     def saveAsTextFile(self, path, compressionCodecClass=None):
         raise NotImplementedError
 
-    # Pair functions
-
     def collectAsMap(self):
         raise NotImplementedError
 
@@ -292,11 +362,6 @@ class RDD(object):
 
     def values(self):
         raise NotImplementedError
-
-    def reduceByKey(self, func, numPartitions=None):
-        keys = {kv[0] for kv in self._jrdd}
-        data = [(key, reduce(func, [kv[1] for kv in self._jrdd if kv[0] == key])) for key in keys]
-        return RDD(data, self.ctx)
 
     def reduceByKeyLocally(self, func):
         raise NotImplementedError
@@ -334,37 +399,8 @@ class RDD(object):
     def _memory_limit(self):
         raise NotImplementedError
 
-    # TODO: support variant with custom partitioner
-    def groupByKey(self, numPartitions=None):
-        keys = {x[0] for x in self._jrdd}
-        out = {k: ResultIterable([x[1] for x in self._jrdd if x[0] == k]) for k in keys}
-        data = list(out.items())
-        return RDD(data, self.ctx)
-
-    def flatMapValues(self, f):
-        flat_map_fn = lambda kv: ((kv[0], x) for x in f(kv[1]))
-        return self.flatMap(flat_map_fn, preservesPartitioning=True)
-
-    def mapValues(self, f):
-        map_values_fn = lambda kv: (kv[0], f(kv[1]))
-        return self.map(map_values_fn, preservesPartitioning=True)
-
     def groupWith(self, other, *others):
         raise NotImplementedError
-
-    def cogroup(self, other, numPartitions=None):
-        vs = {x[0] for x in self._jrdd}
-        us = {x[0] for x in other._jrdd}
-        keys = vs.union(us)
-        data = [
-            (
-                k,
-                ([v[1] for v in self._jrdd if v[0] == k]),
-                ([u[1] for u in other._jrdd if u[0] == k])
-            )
-            for k in keys
-        ]
-        return RDD(data, self.ctx)
 
     def sampleByKey(self, withReplacement, fractions, seed=None):
         raise NotImplementedError
@@ -384,23 +420,8 @@ class RDD(object):
     def coalesce(self, numPartitions, shuffle=False):
         raise NotImplementedError
 
-    def zip(self, other):
-        data = list(zip(other, self._jrdd))
-        return RDD(data, self.ctx)
-
-    def zipWithIndex(self):
-        data = [(b, a) for a, b in list(enumerate(self._jrdd))]
-        return RDD(data, self.ctx)
-
     def zipWithUniqueId(self):
         raise NotImplementedError
-
-    def name(self):
-        return self.name
-
-    def setName(self, name):
-        self.name = name
-        return self
 
     def toDebugString(self):
         raise NotImplementedError
@@ -408,27 +429,5 @@ class RDD(object):
     def getStorageLevel(self):
         raise NotImplementedError
 
-    def _defaultReducePartitions(self):
-        return 1
-
-    def lookup(self, key):
-        return [x for x in self._jrdd if x[0] == key]
-
     def _to_java_object_rdd(self):
         raise NotImplementedError
-
-    def countApprox(self, timeout, confidence=0.95):
-        return len(self._jrdd)
-
-    def sumApprox(self, timeout, confidence=0.95):
-        return sum(self._jrdd)
-
-    def meanApprox(self, timeout, confidence=0.95):
-        return float(sum(self._jrdd)) / len(self._jrdd)
-
-    def countApproxDistinct(self, relativeSD=0.05):
-        return len(set(self._jrdd))
-
-    def toLocalIterator(self):
-        for row in self._jrdd:
-            yield row
