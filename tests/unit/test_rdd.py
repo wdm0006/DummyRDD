@@ -273,3 +273,163 @@ class RDDTests (unittest.TestCase):
 
         output = rdd.collect()
         self.assertEquals(sorted(output), sorted(expected_output))
+
+    def test_not_implemented_methods(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = sc.parallelize([])
+
+        with self.assertRaises(NotImplementedError):
+            rdd._pickled()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.mapPartitionsWithIndex(None, None,)
+
+        with self.assertRaises(NotImplementedError):
+            rdd._computeFractionForSampleSize(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.pipe(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.reduce(None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.treeReduce(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.fold(None, None,)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.aggregate(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.treeAggregate(None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.stats()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.histogram(None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.variance()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.stdev()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.sampleStdev()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.sampleVariance()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.countByValue()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.top(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.takeOrdered(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsNewAPIHadoopDataset(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsNewAPIHadoopFile(None, None, None, None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsHadoopDataset(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsHadoopFile(None, None, None, None, None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsSequenceFile(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsPickleFile(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.saveAsTextFile(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.collectAsMap()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.keys()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.values()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.reduceByKeyLocally(None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.countByKey()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.join(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.leftOuterJoin(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.rightOuterJoin(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.fullOuterJoin(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.partitionBy(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.combineByKey(None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.aggregateByKey(None, None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.foldByKey(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd._can_spill()
+
+        with self.assertRaises(NotImplementedError):
+            rdd._memory_limit()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.groupWith(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.sampleByKey(None, None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.subtractByKey(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.subtract(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.keyBy(None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.repartition(None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.coalesce(None, None)
+
+        with self.assertRaises(NotImplementedError):
+            rdd.zipWithUniqueId()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.toDebugString()
+
+        with self.assertRaises(NotImplementedError):
+            rdd.getStorageLevel()
+
+        with self.assertRaises(NotImplementedError):
+            rdd._to_java_object_rdd()
+
+
+
