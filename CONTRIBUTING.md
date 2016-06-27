@@ -28,12 +28,12 @@ The preferred workflow to contribute to DummyRDD is:
 Running Tests
 =============
 
-Test coverage is non-existent right now, so help out by writing tests for new code. There are also some open issues pertaining
+Test code coverage is still low right now, so help out by writing tests for new code. There are also some open issues pertaining
  to unit testing, so if you're interested in a quick way to make an impact on the project, check those out. 
  
 To run the tests, use:
 
-    $ nosetests --with-coverage
+    $ nosetests --with-coverage --cover-package=dummy_spark
     $ coverage html
     
 Easy Issues / Getting Started
