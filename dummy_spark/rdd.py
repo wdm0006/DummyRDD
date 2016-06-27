@@ -328,7 +328,7 @@ class RDD(object):
         raise NotImplementedError
 
     def top(self, num, key=None):
-        return NotImplementedError
+        raise NotImplementedError
 
     def takeOrdered(self, num, key=None):
         raise NotImplementedError
