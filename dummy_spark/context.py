@@ -170,7 +170,48 @@ class SparkContext(object):
         raise NotImplementedError
 
     def newAPIHadoopRDD(self, inputFormatClass, keyClass, valueClass, keyConverter=None, valueConverter=None, conf=None, batchSize=0):
-        raise NotImplementedError
+        """
+        Read a 'new API' Hadoop InputFormat with arbitrary key and value class, from an arbitrary Hadoop configuration,
+        which is passed in as a Python dict. This will be converted into a Configuration in Java. The mechanism is the
+        same as for sc.sequenceFile.
+
+        :param inputFormatClass: fully qualified classname of Hadoop InputFormat (e.g. "org.apache.hadoop.mapreduce.lib.input.TextInputFormat")
+        :param keyClass: fully qualified classname of key Writable class (e.g. "org.apache.hadoop.io.Text")
+        :param valueClass: fully qualified classname of value Writable class (e.g. "org.apache.hadoop.io.LongWritable")
+        :param keyConverter: (None by default)
+        :param valueConverter: (None by default)
+        :param conf: Hadoop configuration, passed in as a dict (None by default)
+        :param batchSize: The number of Python objects represented as a single Java object. (default 0, choose batchSize automatically)
+        """
+
+        if 'elasticsearch' in inputFormatClass and 'elasticsearch' in valueClass:
+            try:
+                from elasticsearch import Elasticsearch
+            except ImportError:
+                raise ImportError('Must have elasticsearch-py installed to use NewAPIHadoopRDD with the elasticsearch driver')
+
+            host_name = conf.get('es.nodes')
+            host_port = conf.get('es.port')
+            index, mapping = conf.get('es.resource', '/').split('/')
+            query = conf.get('es.query')
+
+            client = Elasticsearch(hosts=['http://%s:%s' % (host_name, host_port, )])
+
+            data = client.search(index=index, doc_type=mapping, body=query)
+            data = data.get('hits', {}).get('hits', [])
+
+            cleaned_data = []
+            for dat in data:
+                if '_source' in dat.keys():
+                    cleaned_data.append((dat.get('_id'), dat.get('_source', {})))
+                elif 'fields' in dat.keys():
+                    cleaned_data.append((dat.get('_id'), dat.get('fields')))
+
+            rdd = RDD(cleaned_data, self, None)
+
+            return rdd
+        else:
+            raise NotImplementedError('Have not implimented %s for NewAPIHadoopRDD' % (inputFormatClass, ))
 
     def hadoopFile(self, path, inputFormatClass, keyClass, valueClass, keyConverter=None, valueConverter=None, conf=None, batchSize=0):
         raise NotImplementedError

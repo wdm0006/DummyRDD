@@ -90,6 +90,7 @@ Implemented functions are:
  * defaultParallelism()
  * emptyRDD()
  * parallelize()
+ * NewAPIHadoopRDD() (only for elasticsearch via elasticsearch-py)
  * range()
  * startTime()
  * stop()

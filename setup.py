@@ -13,7 +13,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='dummyrdd',
     version=VERSION,
-    description='A pure python mocked version of pyspark\'s rdd',
+    description='A pure python mocked version of pyspark\'s rdd class',
     long_description=long_description,
     url='https://github.com/wdm0006/dummyrdd',
     download_url='https://github.com/wdm0006/dummyrdd/tarball/' + VERSION,
