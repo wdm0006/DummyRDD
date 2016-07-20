@@ -140,9 +140,6 @@ class SparkContextTests (unittest.TestCase):
             ctx.newAPIHadoopFile(None, None, None, None)
 
         with self.assertRaises(NotImplementedError):
-            ctx.newAPIHadoopRDD(None, None, None)
-
-        with self.assertRaises(NotImplementedError):
             ctx.pickleFile(None)
 
         with self.assertRaises(NotImplementedError):
