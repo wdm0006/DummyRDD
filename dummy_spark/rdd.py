@@ -415,7 +415,7 @@ class RDD(object):
         raise NotImplementedError
 
     def repartition(self, numPartitions):
-        raise NotImplementedError
+        return self
 
     def coalesce(self, numPartitions, shuffle=False):
         raise NotImplementedError
