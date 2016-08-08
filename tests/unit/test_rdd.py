@@ -414,9 +414,6 @@ class RDDTests (unittest.TestCase):
             rdd.keyBy(None)
 
         with self.assertRaises(NotImplementedError):
-            rdd.repartition(None)
-
-        with self.assertRaises(NotImplementedError):
             rdd.coalesce(None, None)
 
         with self.assertRaises(NotImplementedError):
