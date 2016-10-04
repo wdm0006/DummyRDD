@@ -172,13 +172,7 @@ class RDD(object):
         return self.map(f)
 
     def foreachPartition(self, f):
-        def func(it):
-            r = f(it)
-            try:
-                return iter(r)
-            except TypeError:
-                return iter([])
-        self.mapPartitions(func).count()
+        return f(self._jrdd)
 
     def collect(self):
         return self._jrdd
