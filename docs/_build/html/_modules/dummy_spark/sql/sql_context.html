@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dummy_spark.sql.sql_context &mdash; DummySpark master documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pyspark.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     'master',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/pyspark.js"></script>
+    <link rel="top" title="DummySpark master documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-0"><a href="../../../index.html">DummySpark master documentation</a> &raquo;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for dummy_spark.sql.sql_context</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;willmcginnis&#39;</span>
+
+
+<div class="viewcode-block" id="SQLContext"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext">[docs]</a><span class="k">class</span> <span class="nc">SQLContext</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parkContext</span><span class="p">,</span> <span class="n">sqlContext</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_ssql_ctx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SQLContext.setConf"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.setConf">[docs]</a>    <span class="k">def</span> <span class="nf">setConf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :param value:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.getConf"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.getConf">[docs]</a>    <span class="k">def</span> <span class="nf">getConf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :param defaultValue:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.udf"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.udf">[docs]</a>    <span class="k">def</span> <span class="nf">udf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.range"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.range">[docs]</a>    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param start:</span>
+<span class="sd">        :param end:</span>
+<span class="sd">        :param step:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.registerFunction"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.registerFunction">[docs]</a>    <span class="k">def</span> <span class="nf">registerFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">returnType</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param name:</span>
+<span class="sd">        :param f:</span>
+<span class="sd">        :param returnType:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_inferSchemaFromList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param data:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_inferSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">samplingRatio</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdd:</span>
+<span class="sd">        :param samplingRatio:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SQLContext.inferSchema"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.inferSchema">[docs]</a>    <span class="k">def</span> <span class="nf">inferSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">samplingRatio</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdd:</span>
+<span class="sd">        :param samplingRatio:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.applySchema"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.applySchema">[docs]</a>    <span class="k">def</span> <span class="nf">applySchema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdd:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_createFromRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">samplingRatio</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdd:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :param samplingRatio:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_createFromLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param data:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SQLContext.createDataFrame"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.createDataFrame">[docs]</a>    <span class="k">def</span> <span class="nf">createDataFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">samplingRatio</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param data:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :param samplingRatio:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.registerDataFrameAsTable"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.registerDataFrameAsTable">[docs]</a>    <span class="k">def</span> <span class="nf">registerDataFrameAsTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">tableName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param df:</span>
+<span class="sd">        :param tableName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.parquetFile"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.parquetFile">[docs]</a>    <span class="k">def</span> <span class="nf">parquetFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">paths</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param paths:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.jsonFile"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.jsonFile">[docs]</a>    <span class="k">def</span> <span class="nf">jsonFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">samplingRatio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :param samplingRatio:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.jsonRDD"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.jsonRDD">[docs]</a>    <span class="k">def</span> <span class="nf">jsonRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">samplingRatio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdd:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :param samplingRatio:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.load"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param source:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :param options:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.createExternalTable"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.createExternalTable">[docs]</a>    <span class="k">def</span> <span class="nf">createExternalTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tableName</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param tableName:</span>
+<span class="sd">        :param path:</span>
+<span class="sd">        :param source:</span>
+<span class="sd">        :param schema:</span>
+<span class="sd">        :param options:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.sql"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.sql">[docs]</a>    <span class="k">def</span> <span class="nf">sql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlQuery</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param sqlQuery:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.table"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.table">[docs]</a>    <span class="k">def</span> <span class="nf">table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tableName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param tableName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.tables"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.tables">[docs]</a>    <span class="k">def</span> <span class="nf">tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbName</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param dbName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.tableNames"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.tableNames">[docs]</a>    <span class="k">def</span> <span class="nf">tableNames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbName</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param dbName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.cacheTable"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.cacheTable">[docs]</a>    <span class="k">def</span> <span class="nf">cacheTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tableName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param tableName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.uncacheTable"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.uncacheTable">[docs]</a>    <span class="k">def</span> <span class="nf">uncacheTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tableName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param tableName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SQLContext.clearCache"><a class="viewcode-back" href="../../../dummy_spark.sql.html#dummy_spark.sql.SQLContext.clearCache">[docs]</a>    <span class="k">def</span> <span class="nf">clearCache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-0"><a href="../../../index.html">DummySpark master documentation</a> &raquo;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

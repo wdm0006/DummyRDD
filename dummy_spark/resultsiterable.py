@@ -30,12 +30,25 @@ class ResultIterable(collections.Iterable):
     """
 
     def __init__(self, data):
+        """
+
+        :param data:
+        :return:
+        """
         self.data = data
         self.index = 0
         self.maxindex = len(data)
 
     def __iter__(self):
+        """
+
+        :return:
+        """
         return iter(self.data)
 
     def __len__(self):
+        """
+
+        :return:
+        """
         return len(self.data)

@@ -70,7 +70,6 @@ class jvm(object):
 
 
 class SparkContext(object):
-
     """
     Main entry point for Spark functionality. A SparkContext represents the
     connection to a Spark cluster, and can be used to create L{RDD} and
@@ -90,6 +89,21 @@ class SparkContext(object):
     DUMMY_VERSION = 'dummy version'
 
     def __init__(self, master=None, appName=None, sparkHome=None, pyFiles=None, environment=None, batchSize=0, serializer=None, conf=None, gateway=None, jsc=None, profiler_cls=None):
+        """
+
+        :param master:
+        :param appName:
+        :param sparkHome:
+        :param pyFiles:
+        :param environment:
+        :param batchSize:
+        :param serializer:
+        :param conf:
+        :param gateway:
+        :param jsc:
+        :param profiler_cls:
+        :return:
+        """
         self._callsite = None
         SparkContext._ensure_initialized(self, gateway=gateway)
         self.start_time = time.time()
@@ -101,84 +115,242 @@ class SparkContext(object):
             raise
 
     def _do_init(self, master, appName, sparkHome, pyFiles, environment, batchSize, serializer, conf, jsc, profiler_cls):
+        """
+
+        :param master:
+        :param appName:
+        :param sparkHome:
+        :param pyFiles:
+        :param environment:
+        :param batchSize:
+        :param serializer:
+        :param conf:
+        :param jsc:
+        :param profiler_cls:
+        :return:
+        """
         # TODO: add included files to python path
         return
 
     def _initialize_context(self, jconf):
+        """
+
+        :param jconf:
+        :return:
+        """
         return None
 
     @classmethod
     def _ensure_initialized(cls, instance=None, gateway=None):
+        """
+
+        :param instance:
+        :param gateway:
+        :return:
+        """
         return True
 
     def __enter__(self):
+        """
+
+        :return:
+        """
         return self
 
     def __exit__(self, type, value, trace):
+        """
+
+        :param type:
+        :param value:
+        :param trace:
+        :return:
+        """
         self.stop()
 
     def setLogLevel(self, logLevel):
+        """
+
+        :param logLevel:
+        :return:
+        """
         pass
 
     @classmethod
     def setSystemProperty(cls, key, value):
+        """
+
+        :param key:
+        :param value:
+        :return:
+        """
         pass
 
     @property
     def version(self):
+        """
+
+        :return:
+        """
         return self.DUMMY_VERSION
 
     @property
     def startTime(self):
+        """
+
+        :return:
+        """
         return self.start_time
 
     @property
     def defaultParallelism(self):
+        """
+
+        :return:
+        """
         return 1
 
     @property
     def defaultMinPartitions(self):
+        """
+
+        :return:
+        """
         return 1
 
     def stop(self):
+        """
+
+        :return:
+        """
         pass
 
     def emptyRDD(self):
+        """
+
+        :return:
+        """
         return RDD([], self, None)
 
     def range(self, start, end=None, step=1, numSlices=None):
+        """
+
+        :param start:
+        :param end:
+        :param step:
+        :param numSlices:
+        :return:
+        """
         return RDD(list(range(start, end, step)), self, None)
 
     def parallelize(self, c, numSlices=None):
+        """
+
+        :param c:
+        :param numSlices:
+        :return:
+        """
         return RDD(c, self, None)
 
     def textFile(self, name, minPartitions=None, use_unicode=True):
+        """
+
+        :param name:
+        :param minPartitions:
+        :param use_unicode:
+        :return:
+        """
         data = self._jsc.textFile(name)
         rdd = RDD(data, self, None)
         return rdd
 
     def addPyFile(self, path):
+        """
+
+        :param path:
+        :return:
+        """
         sys.path.append(path)
 
     def pickleFile(self, name, minPartitions=None):
+        """
+        NotImplemented
+
+        :param name:
+        :param minPartitions:
+        :return:
+        """
+
         raise NotImplementedError
 
     def wholeTextFiles(self, path, minPartitions=None, use_unicode=True):
+        """
+        NotImplemented
+
+        :param path:
+        :param minPartitions:
+        :param use_unicode:
+        :return:
+        """
         raise NotImplementedError
 
     def binaryFiles(self, path, minPartitions=None):
+        """
+        NotImplemented
+
+        :param path:
+        :param minPartitions:
+        :return:
+        """
         raise NotImplementedError
 
     def binaryRecords(self, path, recordLength):
+        """
+        NotImplemented
+
+        :param path:
+        :param recordLength:
+        :return:
+        """
         raise NotImplementedError
 
     def _dictToJavaMap(self, d):
+        """
+        NotImplemented
+
+        :param d:
+        :return:
+        """
         raise NotImplementedError
 
     def sequenceFile(self, path, keyClass=None, valueClass=None, keyConverter=None, valueConverter=None, minSplits=None, batchSize=0):
+        """
+        NotImplemented
+
+        :param path:
+        :param keyClass:
+        :param valueClass:
+        :param keyConverter:
+        :param valueConverter:
+        :param minSplits:
+        :param batchSize:
+        :return:
+        """
         raise NotImplementedError
 
     def newAPIHadoopFile(self, path, inputFormatClass, keyClass, valueClass, keyConverter=None, valueConverter=None, conf=None, batchSize=0):
+        """
+        NotImplemented
+
+        :param path:
+        :param inputFormatClass:
+        :param keyClass:
+        :param valueClass:
+        :param keyConverter:
+        :param valueConverter:
+        :param conf:
+        :param batchSize:
+        :return:
+        """
         raise NotImplementedError
 
     def newAPIHadoopRDD(self, inputFormatClass, keyClass, valueClass, keyConverter=None, valueConverter=None, conf=None, batchSize=0):
@@ -226,61 +398,197 @@ class SparkContext(object):
             raise NotImplementedError('Have not implimented %s for NewAPIHadoopRDD' % (inputFormatClass, ))
 
     def hadoopFile(self, path, inputFormatClass, keyClass, valueClass, keyConverter=None, valueConverter=None, conf=None, batchSize=0):
+        """
+        NotImplemented
+
+        :param path:
+        :param inputFormatClass:
+        :param keyClass:
+        :param valueClass:
+        :param keyConverter:
+        :param valueConverter:
+        :param conf:
+        :param batchSize:
+        :return:
+        """
         raise NotImplementedError
 
     def hadoopRDD(self, inputFormatClass, keyClass, valueClass, keyConverter=None, valueConverter=None, conf=None, batchSize=0):
+        """
+        NotImplemented
+
+        :param inputFormatClass:
+        :param keyClass:
+        :param valueClass:
+        :param keyConverter:
+        :param valueConverter:
+        :param conf:
+        :param batchSize:
+        :return:
+        """
         raise NotImplementedError
 
     def _checkpointFile(self, name, input_deserializer):
+        """
+        NotImplemented
+
+        :param name:
+        :param input_deserializer:
+        :return:
+        """
         raise NotImplementedError
 
     def union(self, rdds):
+        """
+        NotImplemented
+
+        :param rdds:
+        :return:
+        """
         raise NotImplementedError
 
     def broadcast(self, value):
+        """
+        NotImplemented
+
+        :param value:
+        :return:
+        """
         raise NotImplementedError
 
     def accumulator(self, value, accum_param=None):
+        """
+        NotImplemented
+
+        :param value:
+        :param accum_param:
+        :return:
+        """
         raise NotImplementedError
 
     def addFile(self, path):
+        """
+        NotImplemented
+
+        :param path:
+        :return:
+        """
         raise NotImplementedError
 
     def clearFiles(self):
+        """
+        NotImplemented
+
+        :return:
+        """
         raise NotImplementedError
 
     def setCheckpointDir(self, dirName):
+        """
+        NotImplemented
+
+        :param dirName:
+        :return:
+        """
         raise NotImplementedError
 
     def _getJavaStorageLevel(self, storageLevel):
+        """
+        NotImplemented
+
+        :param storageLevel:
+        :return:
+        """
         raise NotImplementedError
 
     def setJobGroup(self, groupId, description, interruptOnCancel=False):
+        """
+        NotImplemented
+
+        :param groupId:
+        :param description:
+        :param interruptOnCancel:
+        :return:
+        """
         raise NotImplementedError
 
     def setLocalProperty(self, key, value):
+        """
+        NotImplemented
+
+        :param key:
+        :param value:
+        :return:
+        """
         raise NotImplementedError
 
     def getLocalProperty(self, key):
+        """
+        NotImplemented
+
+        :param key:
+        :return:
+        """
         raise NotImplementedError
 
     def sparkUser(self):
+        """
+        NotImplemented
+
+        :return:
+        """
         raise NotImplementedError
 
     def cancelJobGroup(self, groupId):
+        """
+        NotImplemented
+
+        :param groupId:
+        :return:
+        """
         raise NotImplementedError
 
     def cancelAllJobs(self):
+        """
+        NotImplemented
+
+        :return:
+        """
         raise NotImplementedError
 
     def statusTracker(self):
+        """
+        NotImplemented
+
+        :return:
+        """
         raise NotImplementedError
 
     def runJob(self, rdd, partitionFunc, partitions=None, allowLocal=False):
+        """
+        NotImplemented
+
+        :param rdd:
+        :param partitionFunc:
+        :param partitions:
+        :param allowLocal:
+        :return:
+        """
         raise NotImplementedError
 
     def show_profiles(self):
+        """
+        NotImplemented
+
+        :return:
+        """
         raise NotImplementedError
 
     def dump_profiles(self, path):
+        """
+        NotImplemented
+
+        :param path:
+        :return:
+        """
         raise NotImplementedError
