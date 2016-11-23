@@ -6,13 +6,17 @@ import gzip
 import time
 import sys
 
-try:
-    import cStringIO as StringIO
-except:
-    import StringIO
+if sys.version_info.major == 3:
+    from io import StringIO
+elif sys.version_info.major == 2:
+    try:
+        import cStringIO as StringIO
+    except ImportError:
+        import StringIO
+else:
+    raise ValueError('Python %s not supported' % (sys.version_info.major, ))
 
 from threading import Lock
-
 from dummy_spark.rdd import RDD
 
 try:
