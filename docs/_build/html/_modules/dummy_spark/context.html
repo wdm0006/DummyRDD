@@ -49,8 +49,14 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 
+<span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cStringIO</span> <span class="kn">as</span> <span class="nn">StringIO</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">StringIO</span>
 
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
 
@@ -96,10 +102,16 @@
                 <span class="n">secret_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;fs.s3n.awsSecretAccessKey&#39;</span><span class="p">)</span>
                 <span class="n">conn</span> <span class="o">=</span> <span class="n">tinys3</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="n">access_key</span><span class="p">,</span> <span class="n">secret_key</span><span class="p">)</span>
                 <span class="nb">file</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key_name</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">):</span>
+                    <span class="n">compressed</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="nb">file</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                    <span class="n">gzipper</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">fileobj</span><span class="o">=</span><span class="n">compressed</span><span class="p">)</span> 
+                    <span class="k">return</span> <span class="n">gzipper</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
                 <span class="k">return</span> <span class="nb">file</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Need TinyS3 to use s3 files&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">):</span>
+                <span class="nb">open</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
@@ -320,6 +332,7 @@
 <div class="viewcode-block" id="SparkContext.wholeTextFiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.wholeTextFiles">[docs]</a>    <span class="k">def</span> <span class="nf">wholeTextFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">minPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">use_unicode</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :param minPartitions:</span>
 <span class="sd">        :param use_unicode:</span>
@@ -330,6 +343,7 @@
 <div class="viewcode-block" id="SparkContext.binaryFiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.binaryFiles">[docs]</a>    <span class="k">def</span> <span class="nf">binaryFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">minPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :param minPartitions:</span>
 <span class="sd">        :return:</span>
@@ -339,6 +353,7 @@
 <div class="viewcode-block" id="SparkContext.binaryRecords"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.binaryRecords">[docs]</a>    <span class="k">def</span> <span class="nf">binaryRecords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">recordLength</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :param recordLength:</span>
 <span class="sd">        :return:</span>
@@ -348,6 +363,7 @@
     <span class="k">def</span> <span class="nf">_dictToJavaMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param d:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -356,6 +372,7 @@
 <div class="viewcode-block" id="SparkContext.sequenceFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.sequenceFile">[docs]</a>    <span class="k">def</span> <span class="nf">sequenceFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">keyClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">minSplits</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :param keyClass:</span>
 <span class="sd">        :param valueClass:</span>
@@ -370,6 +387,7 @@
 <div class="viewcode-block" id="SparkContext.newAPIHadoopFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.newAPIHadoopFile">[docs]</a>    <span class="k">def</span> <span class="nf">newAPIHadoopFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :param inputFormatClass:</span>
 <span class="sd">        :param keyClass:</span>
@@ -429,6 +447,7 @@
 <div class="viewcode-block" id="SparkContext.hadoopFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.hadoopFile">[docs]</a>    <span class="k">def</span> <span class="nf">hadoopFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :param inputFormatClass:</span>
 <span class="sd">        :param keyClass:</span>
@@ -444,6 +463,7 @@
 <div class="viewcode-block" id="SparkContext.hadoopRDD"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.hadoopRDD">[docs]</a>    <span class="k">def</span> <span class="nf">hadoopRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param inputFormatClass:</span>
 <span class="sd">        :param keyClass:</span>
 <span class="sd">        :param valueClass:</span>
@@ -458,6 +478,7 @@
     <span class="k">def</span> <span class="nf">_checkpointFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">input_deserializer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param name:</span>
 <span class="sd">        :param input_deserializer:</span>
 <span class="sd">        :return:</span>
@@ -467,6 +488,7 @@
 <div class="viewcode-block" id="SparkContext.union"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.union">[docs]</a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdds</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param rdds:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -475,6 +497,7 @@
 <div class="viewcode-block" id="SparkContext.broadcast"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.broadcast">[docs]</a>    <span class="k">def</span> <span class="nf">broadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param value:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -483,6 +506,7 @@
 <div class="viewcode-block" id="SparkContext.accumulator"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.accumulator">[docs]</a>    <span class="k">def</span> <span class="nf">accumulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">accum_param</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param value:</span>
 <span class="sd">        :param accum_param:</span>
 <span class="sd">        :return:</span>
@@ -492,6 +516,7 @@
 <div class="viewcode-block" id="SparkContext.addFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.addFile">[docs]</a>    <span class="k">def</span> <span class="nf">addFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -500,6 +525,7 @@
 <div class="viewcode-block" id="SparkContext.clearFiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.clearFiles">[docs]</a>    <span class="k">def</span> <span class="nf">clearFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -507,6 +533,7 @@
 <div class="viewcode-block" id="SparkContext.setCheckpointDir"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setCheckpointDir">[docs]</a>    <span class="k">def</span> <span class="nf">setCheckpointDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirName</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param dirName:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -515,6 +542,7 @@
     <span class="k">def</span> <span class="nf">_getJavaStorageLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">storageLevel</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param storageLevel:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -523,6 +551,7 @@
 <div class="viewcode-block" id="SparkContext.setJobGroup"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setJobGroup">[docs]</a>    <span class="k">def</span> <span class="nf">setJobGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupId</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">interruptOnCancel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param groupId:</span>
 <span class="sd">        :param description:</span>
 <span class="sd">        :param interruptOnCancel:</span>
@@ -533,6 +562,7 @@
 <div class="viewcode-block" id="SparkContext.setLocalProperty"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setLocalProperty">[docs]</a>    <span class="k">def</span> <span class="nf">setLocalProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param key:</span>
 <span class="sd">        :param value:</span>
 <span class="sd">        :return:</span>
@@ -542,6 +572,7 @@
 <div class="viewcode-block" id="SparkContext.getLocalProperty"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.getLocalProperty">[docs]</a>    <span class="k">def</span> <span class="nf">getLocalProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param key:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -550,6 +581,7 @@
 <div class="viewcode-block" id="SparkContext.sparkUser"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.sparkUser">[docs]</a>    <span class="k">def</span> <span class="nf">sparkUser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -557,6 +589,7 @@
 <div class="viewcode-block" id="SparkContext.cancelJobGroup"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.cancelJobGroup">[docs]</a>    <span class="k">def</span> <span class="nf">cancelJobGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupId</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param groupId:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -565,6 +598,7 @@
 <div class="viewcode-block" id="SparkContext.cancelAllJobs"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.cancelAllJobs">[docs]</a>    <span class="k">def</span> <span class="nf">cancelAllJobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -572,6 +606,7 @@
 <div class="viewcode-block" id="SparkContext.statusTracker"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.statusTracker">[docs]</a>    <span class="k">def</span> <span class="nf">statusTracker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -579,6 +614,7 @@
 <div class="viewcode-block" id="SparkContext.runJob"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.runJob">[docs]</a>    <span class="k">def</span> <span class="nf">runJob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">partitionFunc</span><span class="p">,</span> <span class="n">partitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">allowLocal</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param rdd:</span>
 <span class="sd">        :param partitionFunc:</span>
 <span class="sd">        :param partitions:</span>
@@ -590,6 +626,7 @@
 <div class="viewcode-block" id="SparkContext.show_profiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.show_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">show_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -597,6 +634,7 @@
 <div class="viewcode-block" id="SparkContext.dump_profiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.dump_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">dump_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NotImplemented</span>
+
 <span class="sd">        :param path:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>

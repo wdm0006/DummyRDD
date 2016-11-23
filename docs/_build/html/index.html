@@ -48,6 +48,47 @@
             
   <div class="section" id="welcome-to-dummy-python-api-docs">
 <h1>Welcome to Dummy Python API Docs!<a class="headerlink" href="#welcome-to-dummy-python-api-docs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>A test class that walks like and RDD, talks like an RDD but is just a list.</p>
+<p>Contains 3 primary classes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>SparkConf</li>
+<li>SparkContext</li>
+<li>RDD</li>
+</ul>
+</div></blockquote>
+<p>All of which implement the exact same API as the real spark methods, but use a simple
+python list as the actual datastore.  Many functions such as the Hadoop API, partitioning, complex
+operations, and other things are not implemented.  See below for detailed list of implemented functions and
+their caveats.</p>
+<p>Note that for now this is experimental, and may later be useful for testing or development, but anything
+developed using this should always be checked on real spark to make sure that things actually work there. Because
+none of the code is actually distributed in this environment, some things will behave differently.</p>
+<p>It is intended that this library can be used as a drop in replacement for a real spark context, without erroring out
+but maybe not actually doing anything (in the case of irrelevant configuration options, for example).</p>
+<p>Currently there is no support for the dataframe api, or for that matter most features of anything, very much
+still a work in progress.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>A quick example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">dummy_spark</span> <span class="kn">import</span> <span class="n">SparkContext</span><span class="p">,</span> <span class="n">SparkConf</span>
+
+<span class="n">sconf</span> <span class="o">=</span> <span class="n">SparkConf</span><span class="p">()</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">master</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="n">sconf</span><span class="p">)</span>
+<span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">rdd</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rdd</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>yields:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">5</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
+</pre></div>
+</div>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -63,6 +104,7 @@
 </ul>
 </li>
 </ul>
+</div>
 </div>
 <div class="section" id="core-classes">
 <h2>Core classes:<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
@@ -90,6 +132,8 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to Dummy Python API Docs!</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
 <li><a class="reference internal" href="#core-classes">Core classes:</a></li>
 </ul>
 </li>
