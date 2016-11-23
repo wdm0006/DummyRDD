@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dummy_spark.context &mdash; DummySpark master documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pyspark.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'master',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/pyspark.js"></script>
+    <link rel="top" title="DummySpark master documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">DummySpark master documentation</a> &raquo;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for dummy_spark.context</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cStringIO</span> <span class="kn">as</span> <span class="nn">StringIO</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">StringIO</span>
+
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
+
+<span class="kn">from</span> <span class="nn">dummy_spark.rdd</span> <span class="kn">import</span> <span class="n">RDD</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">tinys3</span>
+    <span class="n">has_tinys3</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">has_tinys3</span> <span class="o">=</span> <span class="bp">False</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;SparkContext&#39;</span><span class="p">]</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;willmcginnis&#39;</span>
+
+
+<span class="k">class</span> <span class="nc">hadoopConfiguration</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">jvm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hc</span> <span class="o">=</span> <span class="n">hadoopConfiguration</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">hadoopConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hc</span>
+
+    <span class="k">def</span> <span class="nf">textFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">has_tinys3</span><span class="p">:</span>
+                <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;://&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">bucket_name</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">key_name</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="n">access_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;fs.s3n.awsAccessKeyId&#39;</span><span class="p">)</span>
+                <span class="n">secret_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;fs.s3n.awsSecretAccessKey&#39;</span><span class="p">)</span>
+                <span class="n">conn</span> <span class="o">=</span> <span class="n">tinys3</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="n">access_key</span><span class="p">,</span> <span class="n">secret_key</span><span class="p">)</span>
+                <span class="nb">file</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key_name</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">):</span>
+                    <span class="n">compressed</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="nb">file</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                    <span class="n">gzipper</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">fileobj</span><span class="o">=</span><span class="n">compressed</span><span class="p">)</span> 
+                    <span class="k">return</span> <span class="n">gzipper</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="k">return</span> <span class="nb">file</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Need TinyS3 to use s3 files&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">file_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.gz&#39;</span><span class="p">):</span>
+                <span class="nb">open</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="SparkContext"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext">[docs]</a><span class="k">class</span> <span class="nc">SparkContext</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main entry point for Spark functionality. A SparkContext represents the</span>
+<span class="sd">    connection to a Spark cluster, and can be used to create L{RDD} and</span>
+<span class="sd">    broadcast variables on that cluster.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_gateway</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_jvm</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_next_accum_id</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">_active_spark_context</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+    <span class="n">_jsc</span> <span class="o">=</span> <span class="n">jvm</span><span class="p">()</span>
+    <span class="n">_python_includes</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># zip and egg files that need to be added to PYTHONPATH</span>
+
+    <span class="n">PACKAGE_EXTENSIONS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;.zip&#39;</span><span class="p">,</span> <span class="s">&#39;.egg&#39;</span><span class="p">,</span> <span class="s">&#39;.jar&#39;</span><span class="p">)</span>
+
+    <span class="n">DUMMY_VERSION</span> <span class="o">=</span> <span class="s">&#39;dummy version&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">appName</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sparkHome</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">pyFiles</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">environment</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">gateway</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">jsc</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">profiler_cls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param master:</span>
+<span class="sd">        :param appName:</span>
+<span class="sd">        :param sparkHome:</span>
+<span class="sd">        :param pyFiles:</span>
+<span class="sd">        :param environment:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :param serializer:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param gateway:</span>
+<span class="sd">        :param jsc:</span>
+<span class="sd">        :param profiler_cls:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callsite</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">SparkContext</span><span class="o">.</span><span class="n">_ensure_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gateway</span><span class="o">=</span><span class="n">gateway</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_do_init</span><span class="p">(</span><span class="n">master</span><span class="p">,</span> <span class="n">appName</span><span class="p">,</span> <span class="n">sparkHome</span><span class="p">,</span> <span class="n">pyFiles</span><span class="p">,</span> <span class="n">environment</span><span class="p">,</span> <span class="n">batchSize</span><span class="p">,</span> <span class="n">serializer</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">jsc</span><span class="p">,</span> <span class="n">profiler_cls</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c"># If an error occurs, clean up in order to allow future SparkContext creation:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">raise</span>
+
+    <span class="k">def</span> <span class="nf">_do_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">appName</span><span class="p">,</span> <span class="n">sparkHome</span><span class="p">,</span> <span class="n">pyFiles</span><span class="p">,</span> <span class="n">environment</span><span class="p">,</span> <span class="n">batchSize</span><span class="p">,</span> <span class="n">serializer</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">jsc</span><span class="p">,</span> <span class="n">profiler_cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param master:</span>
+<span class="sd">        :param appName:</span>
+<span class="sd">        :param sparkHome:</span>
+<span class="sd">        :param pyFiles:</span>
+<span class="sd">        :param environment:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :param serializer:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param jsc:</span>
+<span class="sd">        :param profiler_cls:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># TODO: add included files to python path</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jconf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param jconf:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_ensure_initialized</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">gateway</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param instance:</span>
+<span class="sd">        :param gateway:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param type:</span>
+<span class="sd">        :param value:</span>
+<span class="sd">        :param trace:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SparkContext.setLogLevel"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setLogLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setLogLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logLevel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param logLevel:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="SparkContext.setSystemProperty"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setSystemProperty">[docs]</a>    <span class="k">def</span> <span class="nf">setSystemProperty</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :param value:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DUMMY_VERSION</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">startTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">defaultParallelism</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">defaultMinPartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="SparkContext.stop"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="SparkContext.emptyRDD"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.emptyRDD">[docs]</a>    <span class="k">def</span> <span class="nf">emptyRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">([],</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SparkContext.range"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.range">[docs]</a>    <span class="k">def</span> <span class="nf">range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numSlices</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param start:</span>
+<span class="sd">        :param end:</span>
+<span class="sd">        :param step:</span>
+<span class="sd">        :param numSlices:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">step</span><span class="p">)),</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SparkContext.parallelize"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.parallelize">[docs]</a>    <span class="k">def</span> <span class="nf">parallelize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">numSlices</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param c:</span>
+<span class="sd">        :param numSlices:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SparkContext.textFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.textFile">[docs]</a>    <span class="k">def</span> <span class="nf">textFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">minPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">use_unicode</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param name:</span>
+<span class="sd">        :param minPartitions:</span>
+<span class="sd">        :param use_unicode:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">rdd</span> <span class="o">=</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rdd</span>
+</div>
+<div class="viewcode-block" id="SparkContext.addPyFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.addPyFile">[docs]</a>    <span class="k">def</span> <span class="nf">addPyFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SparkContext.pickleFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.pickleFile">[docs]</a>    <span class="k">def</span> <span class="nf">pickleFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">minPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param name:</span>
+<span class="sd">        :param minPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.wholeTextFiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.wholeTextFiles">[docs]</a>    <span class="k">def</span> <span class="nf">wholeTextFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">minPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">use_unicode</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param minPartitions:</span>
+<span class="sd">        :param use_unicode:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.binaryFiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.binaryFiles">[docs]</a>    <span class="k">def</span> <span class="nf">binaryFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">minPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param minPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.binaryRecords"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.binaryRecords">[docs]</a>    <span class="k">def</span> <span class="nf">binaryRecords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">recordLength</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param recordLength:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_dictToJavaMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param d:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SparkContext.sequenceFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.sequenceFile">[docs]</a>    <span class="k">def</span> <span class="nf">sequenceFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">keyClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">minSplits</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param keyClass:</span>
+<span class="sd">        :param valueClass:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :param minSplits:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.newAPIHadoopFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.newAPIHadoopFile">[docs]</a>    <span class="k">def</span> <span class="nf">newAPIHadoopFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param inputFormatClass:</span>
+<span class="sd">        :param keyClass:</span>
+<span class="sd">        :param valueClass:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.newAPIHadoopRDD"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.newAPIHadoopRDD">[docs]</a>    <span class="k">def</span> <span class="nf">newAPIHadoopRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read a &#39;new API&#39; Hadoop InputFormat with arbitrary key and value class, from an arbitrary Hadoop configuration,</span>
+<span class="sd">        which is passed in as a Python dict. This will be converted into a Configuration in Java. The mechanism is the</span>
+<span class="sd">        same as for sc.sequenceFile.</span>
+
+<span class="sd">        :param inputFormatClass: fully qualified classname of Hadoop InputFormat (e.g. &quot;org.apache.hadoop.mapreduce.lib.input.TextInputFormat&quot;)</span>
+<span class="sd">        :param keyClass: fully qualified classname of key Writable class (e.g. &quot;org.apache.hadoop.io.Text&quot;)</span>
+<span class="sd">        :param valueClass: fully qualified classname of value Writable class (e.g. &quot;org.apache.hadoop.io.LongWritable&quot;)</span>
+<span class="sd">        :param keyConverter: (None by default)</span>
+<span class="sd">        :param valueConverter: (None by default)</span>
+<span class="sd">        :param conf: Hadoop configuration, passed in as a dict (None by default)</span>
+<span class="sd">        :param batchSize: The number of Python objects represented as a single Java object. (default 0, choose batchSize automatically)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="s">&#39;elasticsearch&#39;</span> <span class="ow">in</span> <span class="n">inputFormatClass</span> <span class="ow">and</span> <span class="s">&#39;elasticsearch&#39;</span> <span class="ow">in</span> <span class="n">valueClass</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">Elasticsearch</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s">&#39;Must have elasticsearch-py installed to use NewAPIHadoopRDD with the elasticsearch driver&#39;</span><span class="p">)</span>
+
+            <span class="n">host_name</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;es.nodes&#39;</span><span class="p">)</span>
+            <span class="n">host_port</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;es.port&#39;</span><span class="p">)</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;es.resource&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;es.query&#39;</span><span class="p">)</span>
+
+            <span class="n">client</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;http://</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host_name</span><span class="p">,</span> <span class="n">host_port</span><span class="p">,</span> <span class="p">)])</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">doc_type</span><span class="o">=</span><span class="n">mapping</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;hits&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;hits&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+            <span class="n">cleaned_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s">&#39;_source&#39;</span> <span class="ow">in</span> <span class="n">dat</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">cleaned_data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">dat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;_id&#39;</span><span class="p">),</span> <span class="n">dat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;_source&#39;</span><span class="p">,</span> <span class="p">{})))</span>
+                <span class="k">elif</span> <span class="s">&#39;fields&#39;</span> <span class="ow">in</span> <span class="n">dat</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">cleaned_data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">dat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;_id&#39;</span><span class="p">),</span> <span class="n">dat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;fields&#39;</span><span class="p">)))</span>
+
+            <span class="n">rdd</span> <span class="o">=</span> <span class="n">RDD</span><span class="p">(</span><span class="n">cleaned_data</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">rdd</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Have not implimented </span><span class="si">%s</span><span class="s"> for NewAPIHadoopRDD&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">inputFormatClass</span><span class="p">,</span> <span class="p">))</span>
+</div>
+<div class="viewcode-block" id="SparkContext.hadoopFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.hadoopFile">[docs]</a>    <span class="k">def</span> <span class="nf">hadoopFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param inputFormatClass:</span>
+<span class="sd">        :param keyClass:</span>
+<span class="sd">        :param valueClass:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.hadoopRDD"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.hadoopRDD">[docs]</a>    <span class="k">def</span> <span class="nf">hadoopRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="p">,</span> <span class="n">valueClass</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param inputFormatClass:</span>
+<span class="sd">        :param keyClass:</span>
+<span class="sd">        :param valueClass:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_checkpointFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">input_deserializer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param name:</span>
+<span class="sd">        :param input_deserializer:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SparkContext.union"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.union">[docs]</a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdds:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.broadcast"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.broadcast">[docs]</a>    <span class="k">def</span> <span class="nf">broadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.accumulator"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.accumulator">[docs]</a>    <span class="k">def</span> <span class="nf">accumulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">accum_param</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">        :param accum_param:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.addFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.addFile">[docs]</a>    <span class="k">def</span> <span class="nf">addFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.clearFiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.clearFiles">[docs]</a>    <span class="k">def</span> <span class="nf">clearFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.setCheckpointDir"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setCheckpointDir">[docs]</a>    <span class="k">def</span> <span class="nf">setCheckpointDir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param dirName:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_getJavaStorageLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">storageLevel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param storageLevel:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SparkContext.setJobGroup"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setJobGroup">[docs]</a>    <span class="k">def</span> <span class="nf">setJobGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupId</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">interruptOnCancel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param groupId:</span>
+<span class="sd">        :param description:</span>
+<span class="sd">        :param interruptOnCancel:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.setLocalProperty"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.setLocalProperty">[docs]</a>    <span class="k">def</span> <span class="nf">setLocalProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :param value:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.getLocalProperty"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.getLocalProperty">[docs]</a>    <span class="k">def</span> <span class="nf">getLocalProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.sparkUser"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.sparkUser">[docs]</a>    <span class="k">def</span> <span class="nf">sparkUser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.cancelJobGroup"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.cancelJobGroup">[docs]</a>    <span class="k">def</span> <span class="nf">cancelJobGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param groupId:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.cancelAllJobs"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.cancelAllJobs">[docs]</a>    <span class="k">def</span> <span class="nf">cancelAllJobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.statusTracker"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.statusTracker">[docs]</a>    <span class="k">def</span> <span class="nf">statusTracker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.runJob"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.runJob">[docs]</a>    <span class="k">def</span> <span class="nf">runJob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdd</span><span class="p">,</span> <span class="n">partitionFunc</span><span class="p">,</span> <span class="n">partitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">allowLocal</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param rdd:</span>
+<span class="sd">        :param partitionFunc:</span>
+<span class="sd">        :param partitions:</span>
+<span class="sd">        :param allowLocal:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.show_profiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.show_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">show_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="SparkContext.dump_profiles"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.SparkContext.dump_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">dump_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">DummySpark master documentation</a> &raquo;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

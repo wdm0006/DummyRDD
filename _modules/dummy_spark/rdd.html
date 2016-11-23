@@ -1,0 +1,1135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dummy_spark.rdd &mdash; DummySpark master documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pyspark.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'master',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/pyspark.js"></script>
+    <link rel="top" title="DummySpark master documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">DummySpark master documentation</a> &raquo;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for dummy_spark.rdd</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+<span class="kn">from</span> <span class="nn">dummy_spark.resultsiterable</span> <span class="kn">import</span> <span class="n">ResultIterable</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;willmcginnis&#39;</span>
+
+
+<div class="viewcode-block" id="RDD"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD">[docs]</a><span class="k">class</span> <span class="nc">RDD</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Resilient Distributed Dataset (RDD) is the basic abstraction in Spark. It represents an immutable, partitioned</span>
+<span class="sd">    collection of elements that can be operated on in parallel. This is a dummy version of that, that is just a list</span>
+<span class="sd">    under the hood.  To be used for testing, and maybe development if you play fast and loose.</span>
+
+<span class="sd">    Important note: the dummy RDD is NOT lazily loaded.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jrdd</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">jrdd_deserializer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param jrdd:</span>
+<span class="sd">        :param ctx:</span>
+<span class="sd">        :param jrdd_deserializer:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># ported</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">jrdd</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">jrdd</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="o">=</span> <span class="n">jrdd</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">jrdd</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">jrdd</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Type </span><span class="si">%s</span><span class="s"> for jrdd not supported&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">jrdd</span><span class="p">),</span> <span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">ctx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_cached</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s">&#39;dummpy-rdd&#39;</span>
+
+        <span class="c"># not ported</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_checkpointed</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd_deserializer</span> <span class="o">=</span> <span class="n">jrdd_deserializer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partitioner</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="RDD.id"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.id">[docs]</a>    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span>
+
+<div class="viewcode-block" id="RDD.name"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.name">[docs]</a>    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+</div>
+<div class="viewcode-block" id="RDD.setName"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.setName">[docs]</a>    <span class="k">def</span> <span class="nf">setName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param name:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RDD.cache"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.cache">[docs]</a>    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="RDD.persist"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.persist">[docs]</a>    <span class="k">def</span> <span class="nf">persist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">storageLevel</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param storageLevel:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="RDD.unpersist"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.unpersist">[docs]</a>    <span class="k">def</span> <span class="nf">unpersist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">_reserialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param serializer:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="RDD.checkpoint"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.checkpoint">[docs]</a>    <span class="k">def</span> <span class="nf">checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="RDD.isCheckpointed"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.isCheckpointed">[docs]</a>    <span class="k">def</span> <span class="nf">isCheckpointed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="RDD.getCheckpointFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.getCheckpointFile">[docs]</a>    <span class="k">def</span> <span class="nf">getCheckpointFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">None</span>
+</div>
+<div class="viewcode-block" id="RDD.map"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.map">[docs]</a>    <span class="k">def</span> <span class="nf">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :param preservesPartitioning:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.flatMap"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.flatMap">[docs]</a>    <span class="k">def</span> <span class="nf">flatMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :param preservesPartitioning:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sl</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.mapPartitions"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.mapPartitions">[docs]</a>    <span class="k">def</span> <span class="nf">mapPartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :param preservesPartitioning:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="n">preservesPartitioning</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.getNumPartitions"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.getNumPartitions">[docs]</a>    <span class="k">def</span> <span class="nf">getNumPartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>
+</div>
+<div class="viewcode-block" id="RDD.filter"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.distinct"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.distinct">[docs]</a>    <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.sample"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">withReplacement</span><span class="p">,</span> <span class="n">fraction</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param withReplacement:</span>
+<span class="sd">        :param fraction:</span>
+<span class="sd">        :param seed:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">fraction</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s">&quot;Negative fraction value: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">fraction</span>
+
+        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="n">idx_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">withReplacement</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">idx_list</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fraction</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))))]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idx_list</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idx_list</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">fraction</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))]]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.randomSplit"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.randomSplit">[docs]</a>    <span class="k">def</span> <span class="nf">randomSplit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param weights:</span>
+<span class="sd">        :param seed:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="RDD.takeSample"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.takeSample">[docs]</a>    <span class="k">def</span> <span class="nf">takeSample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">withReplacement</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param withReplacement:</span>
+<span class="sd">        :param num:</span>
+<span class="sd">        :param seed:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">num</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s">&quot;Negative sample num: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">num</span>
+
+        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">withReplacement</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))))]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">num</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">idx_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)))</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idx_list</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">idx_list</span><span class="p">[:</span><span class="n">num</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">out</span>
+</div>
+<div class="viewcode-block" id="RDD.union"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.union">[docs]</a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.intersection"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.intersection">[docs]</a>    <span class="k">def</span> <span class="nf">intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">RDD</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RDD.repartitionAndSortWithinPartitions"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.repartitionAndSortWithinPartitions">[docs]</a>    <span class="k">def</span> <span class="nf">repartitionAndSortWithinPartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">partitionFunc</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keyfunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :param partitionFunc:</span>
+<span class="sd">        :param ascending:</span>
+<span class="sd">        :param keyfunc:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">keyfunc</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.sortByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sortByKey">[docs]</a>    <span class="k">def</span> <span class="nf">sortByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keyfunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param ascending:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :param keyfunc:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">keyfunc</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.sortBy"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sortBy">[docs]</a>    <span class="k">def</span> <span class="nf">sortBy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyfunc</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param keyfunc:</span>
+<span class="sd">        :param ascending:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">keyfunc</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.glom"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.glom">[docs]</a>    <span class="k">def</span> <span class="nf">glom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span>
+</div>
+<div class="viewcode-block" id="RDD.cartesian"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.cartesian">[docs]</a>    <span class="k">def</span> <span class="nf">cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.groupBy"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.groupBy">[docs]</a>    <span class="k">def</span> <span class="nf">groupBy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">groupByKey</span><span class="p">(</span><span class="n">numPartitions</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.foreach"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.foreach">[docs]</a>    <span class="k">def</span> <span class="nf">foreach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.foreachPartition"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.foreachPartition">[docs]</a>    <span class="k">def</span> <span class="nf">foreachPartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.collect"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.collect">[docs]</a>    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span>
+</div>
+<div class="viewcode-block" id="RDD.sum"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sum">[docs]</a>    <span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.count"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.count">[docs]</a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.mean"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.take"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.take">[docs]</a>    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param num:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">[:</span><span class="n">num</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="RDD.first"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.first">[docs]</a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="RDD.isEmpty"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.isEmpty">[docs]</a>    <span class="k">def</span> <span class="nf">isEmpty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="RDD.reduceByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.reduceByKey">[docs]</a>    <span class="k">def</span> <span class="nf">reduceByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param func:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">kv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">}</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">[</span><span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">kv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">if</span> <span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">]))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+
+    <span class="c"># TODO: support variant with custom partitioner</span></div>
+<div class="viewcode-block" id="RDD.groupByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.groupByKey">[docs]</a>    <span class="k">def</span> <span class="nf">groupByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">}</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">ResultIterable</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.flatMapValues"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.flatMapValues">[docs]</a>    <span class="k">def</span> <span class="nf">flatMapValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flat_map_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="p">((</span><span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="n">flat_map_fn</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.mapValues"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.mapValues">[docs]</a>    <span class="k">def</span> <span class="nf">mapValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">map_values_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="p">(</span><span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">(</span><span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">map_values_fn</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.cogroup"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.cogroup">[docs]</a>    <span class="k">def</span> <span class="nf">cogroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vs</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">}</span>
+        <span class="n">us</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">}</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">vs</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">us</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">k</span><span class="p">,</span>
+                <span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">]),</span>
+                <span class="p">([</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">if</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.zip"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.zip">[docs]</a>    <span class="k">def</span> <span class="nf">zip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.zipWithIndex"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.zipWithIndex">[docs]</a>    <span class="k">def</span> <span class="nf">zipWithIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="n">RDD</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_defaultReducePartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="RDD.lookup"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.lookup">[docs]</a>    <span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="RDD.countApprox"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.countApprox">[docs]</a>    <span class="k">def</span> <span class="nf">countApprox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param timeout:</span>
+<span class="sd">        :param confidence:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.sumApprox"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sumApprox">[docs]</a>    <span class="k">def</span> <span class="nf">sumApprox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param timeout:</span>
+<span class="sd">        :param confidence:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.meanApprox"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.meanApprox">[docs]</a>    <span class="k">def</span> <span class="nf">meanApprox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param timeout:</span>
+<span class="sd">        :param confidence:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RDD.countApproxDistinct"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.countApproxDistinct">[docs]</a>    <span class="k">def</span> <span class="nf">countApproxDistinct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relativeSD</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param relativeSD:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="RDD.toLocalIterator"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.toLocalIterator">[docs]</a>    <span class="k">def</span> <span class="nf">toLocalIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">row</span>
+</div>
+<div class="viewcode-block" id="RDD.max"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.max">[docs]</a>    <span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.min"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.min">[docs]</a>    <span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param key:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jrdd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_pickled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="RDD.mapPartitionsWithIndex"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.mapPartitionsWithIndex">[docs]</a>    <span class="k">def</span> <span class="nf">mapPartitionsWithIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">preservesPartitioning</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :param preservesPartitioning:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_computeFractionForSampleSize</span><span class="p">(</span><span class="n">sampleSizeLowerBound</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">withReplacement</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param sampleSizeLowerBound:</span>
+<span class="sd">        :param total:</span>
+<span class="sd">        :param withReplacement:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="RDD.pipe"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.pipe">[docs]</a>    <span class="k">def</span> <span class="nf">pipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param command:</span>
+<span class="sd">        :param env:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.reduce"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.reduce">[docs]</a>    <span class="k">def</span> <span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.treeReduce"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.treeReduce">[docs]</a>    <span class="k">def</span> <span class="nf">treeReduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :param depth:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.fold"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.fold">[docs]</a>    <span class="k">def</span> <span class="nf">fold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeroValue</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param zeroValue:</span>
+<span class="sd">        :param op:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.aggregate"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.aggregate">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeroValue</span><span class="p">,</span> <span class="n">seqOp</span><span class="p">,</span> <span class="n">combOp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param zeroValue:</span>
+<span class="sd">        :param seqOp:</span>
+<span class="sd">        :param combOp:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.treeAggregate"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.treeAggregate">[docs]</a>    <span class="k">def</span> <span class="nf">treeAggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeroValue</span><span class="p">,</span> <span class="n">seqOp</span><span class="p">,</span> <span class="n">combOp</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param zeroValue:</span>
+<span class="sd">        :param seqOp:</span>
+<span class="sd">        :param combOp:</span>
+<span class="sd">        :param depth:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.stats"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.stats">[docs]</a>    <span class="k">def</span> <span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.histogram"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.histogram">[docs]</a>    <span class="k">def</span> <span class="nf">histogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buckets</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param buckets:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.variance"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.variance">[docs]</a>    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.stdev"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.stdev">[docs]</a>    <span class="k">def</span> <span class="nf">stdev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.sampleStdev"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sampleStdev">[docs]</a>    <span class="k">def</span> <span class="nf">sampleStdev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.sampleVariance"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sampleVariance">[docs]</a>    <span class="k">def</span> <span class="nf">sampleVariance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.countByValue"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.countByValue">[docs]</a>    <span class="k">def</span> <span class="nf">countByValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.top"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.top">[docs]</a>    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param num:</span>
+<span class="sd">        :param key:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.takeOrdered"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.takeOrdered">[docs]</a>    <span class="k">def</span> <span class="nf">takeOrdered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param num:</span>
+<span class="sd">        :param key:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsNewAPIHadoopDataset"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsNewAPIHadoopDataset">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsNewAPIHadoopDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsNewAPIHadoopFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsNewAPIHadoopFile">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsNewAPIHadoopFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">outputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param outputFormatClass:</span>
+<span class="sd">        :param keyClass:</span>
+<span class="sd">        :param valueClass:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsHadoopDataset"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsHadoopDataset">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsHadoopDataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsHadoopFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsHadoopFile">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsHadoopFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">outputFormatClass</span><span class="p">,</span> <span class="n">keyClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueClass</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keyConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valueConverter</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">conf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">compressionCodecClass</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param outputFormatClass:</span>
+<span class="sd">        :param keyClass:</span>
+<span class="sd">        :param valueClass:</span>
+<span class="sd">        :param keyConverter:</span>
+<span class="sd">        :param valueConverter:</span>
+<span class="sd">        :param conf:</span>
+<span class="sd">        :param compressionCodecClass:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsSequenceFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsSequenceFile">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsSequenceFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">compressionCodecClass</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param compressionCodecClass:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsPickleFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsPickleFile">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsPickleFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">batchSize</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param batchSize:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.saveAsTextFile"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.saveAsTextFile">[docs]</a>    <span class="k">def</span> <span class="nf">saveAsTextFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">compressionCodecClass</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param path:</span>
+<span class="sd">        :param compressionCodecClass:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.collectAsMap"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.collectAsMap">[docs]</a>    <span class="k">def</span> <span class="nf">collectAsMap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.keys"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.values"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.reduceByKeyLocally"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.reduceByKeyLocally">[docs]</a>    <span class="k">def</span> <span class="nf">reduceByKeyLocally</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param func:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.countByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.countByKey">[docs]</a>    <span class="k">def</span> <span class="nf">countByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.join"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.leftOuterJoin"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.leftOuterJoin">[docs]</a>    <span class="k">def</span> <span class="nf">leftOuterJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.rightOuterJoin"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.rightOuterJoin">[docs]</a>    <span class="k">def</span> <span class="nf">rightOuterJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.fullOuterJoin"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.fullOuterJoin">[docs]</a>    <span class="k">def</span> <span class="nf">fullOuterJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.partitionBy"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.partitionBy">[docs]</a>    <span class="k">def</span> <span class="nf">partitionBy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numPartitions</span><span class="p">,</span> <span class="n">partitionFunc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :param partitionFunc:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.combineByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.combineByKey">[docs]</a>    <span class="k">def</span> <span class="nf">combineByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">createCombiner</span><span class="p">,</span> <span class="n">mergeValue</span><span class="p">,</span> <span class="n">mergeCombiners</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param createCombiner:</span>
+<span class="sd">        :param mergeValue:</span>
+<span class="sd">        :param mergeCombiners:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.aggregateByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.aggregateByKey">[docs]</a>    <span class="k">def</span> <span class="nf">aggregateByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeroValue</span><span class="p">,</span> <span class="n">seqFunc</span><span class="p">,</span> <span class="n">combFunc</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param zeroValue:</span>
+<span class="sd">        :param seqFunc:</span>
+<span class="sd">        :param combFunc:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.foldByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.foldByKey">[docs]</a>    <span class="k">def</span> <span class="nf">foldByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeroValue</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param zeroValue:</span>
+<span class="sd">        :param func:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_can_spill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_memory_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="RDD.groupWith"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.groupWith">[docs]</a>    <span class="k">def</span> <span class="nf">groupWith</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param others:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.sampleByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.sampleByKey">[docs]</a>    <span class="k">def</span> <span class="nf">sampleByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">withReplacement</span><span class="p">,</span> <span class="n">fractions</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param withReplacement:</span>
+<span class="sd">        :param fractions:</span>
+<span class="sd">        :param seed:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.subtractByKey"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.subtractByKey">[docs]</a>    <span class="k">def</span> <span class="nf">subtractByKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.subtract"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.subtract">[docs]</a>    <span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">numPartitions</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param other:</span>
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.keyBy"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.keyBy">[docs]</a>    <span class="k">def</span> <span class="nf">keyBy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param f:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.repartition"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.repartition">[docs]</a>    <span class="k">def</span> <span class="nf">repartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numPartitions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="RDD.coalesce"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.coalesce">[docs]</a>    <span class="k">def</span> <span class="nf">coalesce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numPartitions</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :param numPartitions:</span>
+<span class="sd">        :param shuffle:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.zipWithUniqueId"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.zipWithUniqueId">[docs]</a>    <span class="k">def</span> <span class="nf">zipWithUniqueId</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.toDebugString"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.toDebugString">[docs]</a>    <span class="k">def</span> <span class="nf">toDebugString</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+<div class="viewcode-block" id="RDD.getStorageLevel"><a class="viewcode-back" href="../../dummy_spark.html#dummy_spark.RDD.getStorageLevel">[docs]</a>    <span class="k">def</span> <span class="nf">getStorageLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</div>
+    <span class="k">def</span> <span class="nf">_to_java_object_rdd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NotImplemented</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">DummySpark master documentation</a> &raquo;</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

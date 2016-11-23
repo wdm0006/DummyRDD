@@ -1,0 +1,2708 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyspark package &mdash; DummySpark master documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pyspark.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'master',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/pyspark.js"></script>
+    <link rel="top" title="DummySpark master documentation" href="index.html" />
+    <link rel="next" title="dummy_spark.sql module" href="dummy_spark.sql.html" />
+    <link rel="prev" title="Welcome to Dummy Python API Docs!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="dummy_spark.sql.html" title="dummy_spark.sql module"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Dummy Python API Docs!"
+             accesskey="P">previous</a> |</li>
+    
+        <li class="nav-item nav-item-0"><a href="index.html">DummySpark master documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyspark-package">
+<h1>pyspark package<a class="headerlink" href="#pyspark-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dummy_spark.sql.html">dummy_spark.sql module</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-dummy_spark">
+<span id="contents"></span><h2>Contents<a class="headerlink" href="#module-dummy_spark" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dummy_spark.RDD">
+<em class="property">class </em><code class="descclassname">dummy_spark.</code><code class="descname">RDD</code><span class="sig-paren">(</span><em>jrdd</em>, <em>ctx</em>, <em>jrdd_deserializer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Resilient Distributed Dataset (RDD) is the basic abstraction in Spark. It represents an immutable, partitioned
+collection of elements that can be operated on in parallel. This is a dummy version of that, that is just a list
+under the hood.  To be used for testing, and maybe development if you play fast and loose.</p>
+<p>Important note: the dummy RDD is NOT lazily loaded.</p>
+<dl class="method">
+<dt id="dummy_spark.RDD.aggregate">
+<code class="descname">aggregate</code><span class="sig-paren">(</span><em>zeroValue</em>, <em>seqOp</em>, <em>combOp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.aggregate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>zeroValue</strong> &#8211; </li>
+<li><strong>seqOp</strong> &#8211; </li>
+<li><strong>combOp</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.aggregateByKey">
+<code class="descname">aggregateByKey</code><span class="sig-paren">(</span><em>zeroValue</em>, <em>seqFunc</em>, <em>combFunc</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.aggregateByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.aggregateByKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>zeroValue</strong> &#8211; </li>
+<li><strong>seqFunc</strong> &#8211; </li>
+<li><strong>combFunc</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.cache">
+<code class="descname">cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.cache" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.cartesian">
+<code class="descname">cartesian</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.checkpoint">
+<code class="descname">checkpoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.coalesce">
+<code class="descname">coalesce</code><span class="sig-paren">(</span><em>numPartitions</em>, <em>shuffle=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.coalesce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.coalesce" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>numPartitions</strong> &#8211; </li>
+<li><strong>shuffle</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.cogroup">
+<code class="descname">cogroup</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.cogroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.cogroup" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.collect">
+<code class="descname">collect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.collect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.collect" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.collectAsMap">
+<code class="descname">collectAsMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.collectAsMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.collectAsMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.combineByKey">
+<code class="descname">combineByKey</code><span class="sig-paren">(</span><em>createCombiner</em>, <em>mergeValue</em>, <em>mergeCombiners</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.combineByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.combineByKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>createCombiner</strong> &#8211; </li>
+<li><strong>mergeValue</strong> &#8211; </li>
+<li><strong>mergeCombiners</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.RDD.context">
+<code class="descname">context</code><a class="headerlink" href="#dummy_spark.RDD.context" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.count">
+<code class="descname">count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.count" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.countApprox">
+<code class="descname">countApprox</code><span class="sig-paren">(</span><em>timeout</em>, <em>confidence=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.countApprox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.countApprox" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>timeout</strong> &#8211; </li>
+<li><strong>confidence</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.countApproxDistinct">
+<code class="descname">countApproxDistinct</code><span class="sig-paren">(</span><em>relativeSD=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.countApproxDistinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.countApproxDistinct" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>relativeSD</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.countByKey">
+<code class="descname">countByKey</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.countByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.countByKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.countByValue">
+<code class="descname">countByValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.countByValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.countByValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.distinct">
+<code class="descname">distinct</code><span class="sig-paren">(</span><em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.distinct" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numPartitions</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.filter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.first">
+<code class="descname">first</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.first" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.flatMap">
+<code class="descname">flatMap</code><span class="sig-paren">(</span><em>f</em>, <em>preservesPartitioning=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.flatMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.flatMap" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; </li>
+<li><strong>preservesPartitioning</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.flatMapValues">
+<code class="descname">flatMapValues</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.flatMapValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.flatMapValues" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.fold">
+<code class="descname">fold</code><span class="sig-paren">(</span><em>zeroValue</em>, <em>op</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.fold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.fold" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>zeroValue</strong> &#8211; </li>
+<li><strong>op</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.foldByKey">
+<code class="descname">foldByKey</code><span class="sig-paren">(</span><em>zeroValue</em>, <em>func</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.foldByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.foldByKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>zeroValue</strong> &#8211; </li>
+<li><strong>func</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.foreach">
+<code class="descname">foreach</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.foreach"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.foreach" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.foreachPartition">
+<code class="descname">foreachPartition</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.foreachPartition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.foreachPartition" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.fullOuterJoin">
+<code class="descname">fullOuterJoin</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.fullOuterJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.fullOuterJoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.getCheckpointFile">
+<code class="descname">getCheckpointFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.getCheckpointFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.getCheckpointFile" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.getNumPartitions">
+<code class="descname">getNumPartitions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.getNumPartitions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.getNumPartitions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.getStorageLevel">
+<code class="descname">getStorageLevel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.getStorageLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.getStorageLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.glom">
+<code class="descname">glom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.glom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.glom" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.groupBy">
+<code class="descname">groupBy</code><span class="sig-paren">(</span><em>f</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.groupBy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.groupBy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.groupByKey">
+<code class="descname">groupByKey</code><span class="sig-paren">(</span><em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.groupByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.groupByKey" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numPartitions</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.groupWith">
+<code class="descname">groupWith</code><span class="sig-paren">(</span><em>other</em>, <em>*others</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.groupWith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.groupWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>others</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.histogram">
+<code class="descname">histogram</code><span class="sig-paren">(</span><em>buckets</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.histogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>buckets</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.id">
+<code class="descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.intersection">
+<code class="descname">intersection</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.intersection" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.isCheckpointed">
+<code class="descname">isCheckpointed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.isCheckpointed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.isCheckpointed" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.isEmpty">
+<code class="descname">isEmpty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.isEmpty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.isEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.keyBy">
+<code class="descname">keyBy</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.keyBy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.keyBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.keys">
+<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.leftOuterJoin">
+<code class="descname">leftOuterJoin</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.leftOuterJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.leftOuterJoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.lookup">
+<code class="descname">lookup</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.lookup" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.map">
+<code class="descname">map</code><span class="sig-paren">(</span><em>f</em>, <em>preservesPartitioning=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.map" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; </li>
+<li><strong>preservesPartitioning</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.mapPartitions">
+<code class="descname">mapPartitions</code><span class="sig-paren">(</span><em>f</em>, <em>preservesPartitioning=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.mapPartitions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.mapPartitions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; </li>
+<li><strong>preservesPartitioning</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.mapPartitionsWithIndex">
+<code class="descname">mapPartitionsWithIndex</code><span class="sig-paren">(</span><em>f</em>, <em>preservesPartitioning=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.mapPartitionsWithIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.mapPartitionsWithIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; </li>
+<li><strong>preservesPartitioning</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.mapValues">
+<code class="descname">mapValues</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.mapValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.mapValues" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.max">
+<code class="descname">max</code><span class="sig-paren">(</span><em>key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.max" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.mean">
+<code class="descname">mean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.mean" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.meanApprox">
+<code class="descname">meanApprox</code><span class="sig-paren">(</span><em>timeout</em>, <em>confidence=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.meanApprox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.meanApprox" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>timeout</strong> &#8211; </li>
+<li><strong>confidence</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.min">
+<code class="descname">min</code><span class="sig-paren">(</span><em>key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.min" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.partitionBy">
+<code class="descname">partitionBy</code><span class="sig-paren">(</span><em>numPartitions</em>, <em>partitionFunc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.partitionBy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.partitionBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>numPartitions</strong> &#8211; </li>
+<li><strong>partitionFunc</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.persist">
+<code class="descname">persist</code><span class="sig-paren">(</span><em>storageLevel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.persist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.persist" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>storageLevel</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.pipe">
+<code class="descname">pipe</code><span class="sig-paren">(</span><em>command</em>, <em>env=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>command</strong> &#8211; </li>
+<li><strong>env</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.randomSplit">
+<code class="descname">randomSplit</code><span class="sig-paren">(</span><em>weights</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.randomSplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.randomSplit" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> &#8211; </li>
+<li><strong>seed</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.reduce">
+<code class="descname">reduce</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.reduce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.reduce" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.reduceByKey">
+<code class="descname">reduceByKey</code><span class="sig-paren">(</span><em>func</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.reduceByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.reduceByKey" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>func</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.reduceByKeyLocally">
+<code class="descname">reduceByKeyLocally</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.reduceByKeyLocally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.reduceByKeyLocally" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.repartition">
+<code class="descname">repartition</code><span class="sig-paren">(</span><em>numPartitions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.repartition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.repartition" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numPartitions</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.repartitionAndSortWithinPartitions">
+<code class="descname">repartitionAndSortWithinPartitions</code><span class="sig-paren">(</span><em>numPartitions=None</em>, <em>partitionFunc=None</em>, <em>ascending=True</em>, <em>keyfunc=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.repartitionAndSortWithinPartitions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.repartitionAndSortWithinPartitions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>numPartitions</strong> &#8211; </li>
+<li><strong>partitionFunc</strong> &#8211; </li>
+<li><strong>ascending</strong> &#8211; </li>
+<li><strong>keyfunc</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.rightOuterJoin">
+<code class="descname">rightOuterJoin</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.rightOuterJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.rightOuterJoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><em>withReplacement</em>, <em>fraction</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sample" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>withReplacement</strong> &#8211; </li>
+<li><strong>fraction</strong> &#8211; </li>
+<li><strong>seed</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sampleByKey">
+<code class="descname">sampleByKey</code><span class="sig-paren">(</span><em>withReplacement</em>, <em>fractions</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sampleByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sampleByKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>withReplacement</strong> &#8211; </li>
+<li><strong>fractions</strong> &#8211; </li>
+<li><strong>seed</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sampleStdev">
+<code class="descname">sampleStdev</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sampleStdev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sampleStdev" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sampleVariance">
+<code class="descname">sampleVariance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sampleVariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sampleVariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsHadoopDataset">
+<code class="descname">saveAsHadoopDataset</code><span class="sig-paren">(</span><em>conf</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsHadoopDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsHadoopDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>conf</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsHadoopFile">
+<code class="descname">saveAsHadoopFile</code><span class="sig-paren">(</span><em>path</em>, <em>outputFormatClass</em>, <em>keyClass=None</em>, <em>valueClass=None</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>conf=None</em>, <em>compressionCodecClass=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsHadoopFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsHadoopFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>outputFormatClass</strong> &#8211; </li>
+<li><strong>keyClass</strong> &#8211; </li>
+<li><strong>valueClass</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+<li><strong>conf</strong> &#8211; </li>
+<li><strong>compressionCodecClass</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsNewAPIHadoopDataset">
+<code class="descname">saveAsNewAPIHadoopDataset</code><span class="sig-paren">(</span><em>conf</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsNewAPIHadoopDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsNewAPIHadoopDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>conf</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsNewAPIHadoopFile">
+<code class="descname">saveAsNewAPIHadoopFile</code><span class="sig-paren">(</span><em>path</em>, <em>outputFormatClass</em>, <em>keyClass=None</em>, <em>valueClass=None</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>conf=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsNewAPIHadoopFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsNewAPIHadoopFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>outputFormatClass</strong> &#8211; </li>
+<li><strong>keyClass</strong> &#8211; </li>
+<li><strong>valueClass</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+<li><strong>conf</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsPickleFile">
+<code class="descname">saveAsPickleFile</code><span class="sig-paren">(</span><em>path</em>, <em>batchSize=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsPickleFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsPickleFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>batchSize</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsSequenceFile">
+<code class="descname">saveAsSequenceFile</code><span class="sig-paren">(</span><em>path</em>, <em>compressionCodecClass=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsSequenceFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsSequenceFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>compressionCodecClass</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.saveAsTextFile">
+<code class="descname">saveAsTextFile</code><span class="sig-paren">(</span><em>path</em>, <em>compressionCodecClass=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.saveAsTextFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.saveAsTextFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>compressionCodecClass</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.setName">
+<code class="descname">setName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.setName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.setName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sortBy">
+<code class="descname">sortBy</code><span class="sig-paren">(</span><em>keyfunc</em>, <em>ascending=True</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sortBy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sortBy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>keyfunc</strong> &#8211; </li>
+<li><strong>ascending</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sortByKey">
+<code class="descname">sortByKey</code><span class="sig-paren">(</span><em>ascending=True</em>, <em>numPartitions=None</em>, <em>keyfunc=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sortByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sortByKey" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ascending</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+<li><strong>keyfunc</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.stats">
+<code class="descname">stats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.stdev">
+<code class="descname">stdev</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.stdev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.stdev" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.subtract">
+<code class="descname">subtract</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.subtract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.subtractByKey">
+<code class="descname">subtractByKey</code><span class="sig-paren">(</span><em>other</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.subtractByKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.subtractByKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sum">
+<code class="descname">sum</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sum" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.sumApprox">
+<code class="descname">sumApprox</code><span class="sig-paren">(</span><em>timeout</em>, <em>confidence=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.sumApprox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.sumApprox" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>timeout</strong> &#8211; </li>
+<li><strong>confidence</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.take">
+<code class="descname">take</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.take" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.takeOrdered">
+<code class="descname">takeOrdered</code><span class="sig-paren">(</span><em>num</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.takeOrdered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.takeOrdered" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num</strong> &#8211; </li>
+<li><strong>key</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.takeSample">
+<code class="descname">takeSample</code><span class="sig-paren">(</span><em>withReplacement</em>, <em>num</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.takeSample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.takeSample" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>withReplacement</strong> &#8211; </li>
+<li><strong>num</strong> &#8211; </li>
+<li><strong>seed</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.toDebugString">
+<code class="descname">toDebugString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.toDebugString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.toDebugString" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.toLocalIterator">
+<code class="descname">toLocalIterator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.toLocalIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.toLocalIterator" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.top">
+<code class="descname">top</code><span class="sig-paren">(</span><em>num</em>, <em>key=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.top"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.top" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num</strong> &#8211; </li>
+<li><strong>key</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.treeAggregate">
+<code class="descname">treeAggregate</code><span class="sig-paren">(</span><em>zeroValue</em>, <em>seqOp</em>, <em>combOp</em>, <em>depth=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.treeAggregate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.treeAggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>zeroValue</strong> &#8211; </li>
+<li><strong>seqOp</strong> &#8211; </li>
+<li><strong>combOp</strong> &#8211; </li>
+<li><strong>depth</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.treeReduce">
+<code class="descname">treeReduce</code><span class="sig-paren">(</span><em>f</em>, <em>depth=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.treeReduce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.treeReduce" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> &#8211; </li>
+<li><strong>depth</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.union">
+<code class="descname">union</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.union" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.unpersist">
+<code class="descname">unpersist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.unpersist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.unpersist" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.values">
+<code class="descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.variance">
+<code class="descname">variance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.zip">
+<code class="descname">zip</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.zip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.zip" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.zipWithIndex">
+<code class="descname">zipWithIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.zipWithIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.zipWithIndex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.RDD.zipWithUniqueId">
+<code class="descname">zipWithUniqueId</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/rdd.html#RDD.zipWithUniqueId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.RDD.zipWithUniqueId" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dummy_spark.SparkConf">
+<em class="property">class </em><code class="descclassname">dummy_spark.</code><code class="descname">SparkConf</code><span class="sig-paren">(</span><em>loadDefaults=True</em>, <em>_jvm=None</em>, <em>_jconf=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="dummy_spark.SparkConf.DEBUG_STRING">
+<code class="descname">DEBUG_STRING</code><em class="property"> = 'no string for dummy version'</em><a class="headerlink" href="#dummy_spark.SparkConf.DEBUG_STRING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.contains">
+<code class="descname">contains</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.contains" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>key</em>, <em>defaultValue=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>defaultValue</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.getAll">
+<code class="descname">getAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.getAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.getAll" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.set" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.setAll">
+<code class="descname">setAll</code><span class="sig-paren">(</span><em>pairs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.setAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.setAll" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pairs</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.setAppName">
+<code class="descname">setAppName</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.setAppName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.setAppName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.setExecutorEnv">
+<code class="descname">setExecutorEnv</code><span class="sig-paren">(</span><em>key=None</em>, <em>value=None</em>, <em>pairs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.setExecutorEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.setExecutorEnv" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+<li><strong>pairs</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.setIfMissing">
+<code class="descname">setIfMissing</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.setIfMissing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.setIfMissing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.setMaster">
+<code class="descname">setMaster</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.setMaster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.setMaster" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.setSparkHome">
+<code class="descname">setSparkHome</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.setSparkHome"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.setSparkHome" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkConf.toDebugString">
+<code class="descname">toDebugString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/conf.html#SparkConf.toDebugString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkConf.toDebugString" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dummy_spark.SparkContext">
+<em class="property">class </em><code class="descclassname">dummy_spark.</code><code class="descname">SparkContext</code><span class="sig-paren">(</span><em>master=None</em>, <em>appName=None</em>, <em>sparkHome=None</em>, <em>pyFiles=None</em>, <em>environment=None</em>, <em>batchSize=0</em>, <em>serializer=None</em>, <em>conf=None</em>, <em>gateway=None</em>, <em>jsc=None</em>, <em>profiler_cls=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main entry point for Spark functionality. A SparkContext represents the
+connection to a Spark cluster, and can be used to create <a class="reference internal" href="#dummy_spark.RDD" title="dummy_spark.RDD"><code class="xref py py-class docutils literal"><span class="pre">RDD</span></code></a> and
+broadcast variables on that cluster.</p>
+<dl class="attribute">
+<dt id="dummy_spark.SparkContext.DUMMY_VERSION">
+<code class="descname">DUMMY_VERSION</code><em class="property"> = 'dummy version'</em><a class="headerlink" href="#dummy_spark.SparkContext.DUMMY_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.SparkContext.PACKAGE_EXTENSIONS">
+<code class="descname">PACKAGE_EXTENSIONS</code><em class="property"> = ('.zip', '.egg', '.jar')</em><a class="headerlink" href="#dummy_spark.SparkContext.PACKAGE_EXTENSIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.accumulator">
+<code class="descname">accumulator</code><span class="sig-paren">(</span><em>value</em>, <em>accum_param=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.accumulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.accumulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> &#8211; </li>
+<li><strong>accum_param</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.addFile">
+<code class="descname">addFile</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.addFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.addFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.addPyFile">
+<code class="descname">addPyFile</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.addPyFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.addPyFile" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.binaryFiles">
+<code class="descname">binaryFiles</code><span class="sig-paren">(</span><em>path</em>, <em>minPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.binaryFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.binaryFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>minPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.binaryRecords">
+<code class="descname">binaryRecords</code><span class="sig-paren">(</span><em>path</em>, <em>recordLength</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.binaryRecords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.binaryRecords" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>recordLength</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.broadcast">
+<code class="descname">broadcast</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.broadcast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.broadcast" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.cancelAllJobs">
+<code class="descname">cancelAllJobs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.cancelAllJobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.cancelAllJobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.cancelJobGroup">
+<code class="descname">cancelJobGroup</code><span class="sig-paren">(</span><em>groupId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.cancelJobGroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.cancelJobGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>groupId</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.clearFiles">
+<code class="descname">clearFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.clearFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.clearFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.SparkContext.defaultMinPartitions">
+<code class="descname">defaultMinPartitions</code><a class="headerlink" href="#dummy_spark.SparkContext.defaultMinPartitions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.SparkContext.defaultParallelism">
+<code class="descname">defaultParallelism</code><a class="headerlink" href="#dummy_spark.SparkContext.defaultParallelism" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.dump_profiles">
+<code class="descname">dump_profiles</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.dump_profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.dump_profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.emptyRDD">
+<code class="descname">emptyRDD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.emptyRDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.emptyRDD" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.getLocalProperty">
+<code class="descname">getLocalProperty</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.getLocalProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.getLocalProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.hadoopFile">
+<code class="descname">hadoopFile</code><span class="sig-paren">(</span><em>path</em>, <em>inputFormatClass</em>, <em>keyClass</em>, <em>valueClass</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>conf=None</em>, <em>batchSize=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.hadoopFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.hadoopFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>inputFormatClass</strong> &#8211; </li>
+<li><strong>keyClass</strong> &#8211; </li>
+<li><strong>valueClass</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+<li><strong>conf</strong> &#8211; </li>
+<li><strong>batchSize</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.hadoopRDD">
+<code class="descname">hadoopRDD</code><span class="sig-paren">(</span><em>inputFormatClass</em>, <em>keyClass</em>, <em>valueClass</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>conf=None</em>, <em>batchSize=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.hadoopRDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.hadoopRDD" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputFormatClass</strong> &#8211; </li>
+<li><strong>keyClass</strong> &#8211; </li>
+<li><strong>valueClass</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+<li><strong>conf</strong> &#8211; </li>
+<li><strong>batchSize</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.newAPIHadoopFile">
+<code class="descname">newAPIHadoopFile</code><span class="sig-paren">(</span><em>path</em>, <em>inputFormatClass</em>, <em>keyClass</em>, <em>valueClass</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>conf=None</em>, <em>batchSize=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.newAPIHadoopFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.newAPIHadoopFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>inputFormatClass</strong> &#8211; </li>
+<li><strong>keyClass</strong> &#8211; </li>
+<li><strong>valueClass</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+<li><strong>conf</strong> &#8211; </li>
+<li><strong>batchSize</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.newAPIHadoopRDD">
+<code class="descname">newAPIHadoopRDD</code><span class="sig-paren">(</span><em>inputFormatClass</em>, <em>keyClass</em>, <em>valueClass</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>conf=None</em>, <em>batchSize=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.newAPIHadoopRDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.newAPIHadoopRDD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a &#8216;new API&#8217; Hadoop InputFormat with arbitrary key and value class, from an arbitrary Hadoop configuration,
+which is passed in as a Python dict. This will be converted into a Configuration in Java. The mechanism is the
+same as for sc.sequenceFile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>inputFormatClass</strong> &#8211; fully qualified classname of Hadoop InputFormat (e.g. &#8220;org.apache.hadoop.mapreduce.lib.input.TextInputFormat&#8221;)</li>
+<li><strong>keyClass</strong> &#8211; fully qualified classname of key Writable class (e.g. &#8220;org.apache.hadoop.io.Text&#8221;)</li>
+<li><strong>valueClass</strong> &#8211; fully qualified classname of value Writable class (e.g. &#8220;org.apache.hadoop.io.LongWritable&#8221;)</li>
+<li><strong>keyConverter</strong> &#8211; (None by default)</li>
+<li><strong>valueConverter</strong> &#8211; (None by default)</li>
+<li><strong>conf</strong> &#8211; Hadoop configuration, passed in as a dict (None by default)</li>
+<li><strong>batchSize</strong> &#8211; The number of Python objects represented as a single Java object. (default 0, choose batchSize automatically)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.parallelize">
+<code class="descname">parallelize</code><span class="sig-paren">(</span><em>c</em>, <em>numSlices=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.parallelize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.parallelize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>c</strong> &#8211; </li>
+<li><strong>numSlices</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.pickleFile">
+<code class="descname">pickleFile</code><span class="sig-paren">(</span><em>name</em>, <em>minPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.pickleFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.pickleFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8211; </li>
+<li><strong>minPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.range">
+<code class="descname">range</code><span class="sig-paren">(</span><em>start</em>, <em>end=None</em>, <em>step=1</em>, <em>numSlices=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.range" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> &#8211; </li>
+<li><strong>end</strong> &#8211; </li>
+<li><strong>step</strong> &#8211; </li>
+<li><strong>numSlices</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.runJob">
+<code class="descname">runJob</code><span class="sig-paren">(</span><em>rdd</em>, <em>partitionFunc</em>, <em>partitions=None</em>, <em>allowLocal=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.runJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.runJob" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rdd</strong> &#8211; </li>
+<li><strong>partitionFunc</strong> &#8211; </li>
+<li><strong>partitions</strong> &#8211; </li>
+<li><strong>allowLocal</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.sequenceFile">
+<code class="descname">sequenceFile</code><span class="sig-paren">(</span><em>path</em>, <em>keyClass=None</em>, <em>valueClass=None</em>, <em>keyConverter=None</em>, <em>valueConverter=None</em>, <em>minSplits=None</em>, <em>batchSize=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.sequenceFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.sequenceFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>keyClass</strong> &#8211; </li>
+<li><strong>valueClass</strong> &#8211; </li>
+<li><strong>keyConverter</strong> &#8211; </li>
+<li><strong>valueConverter</strong> &#8211; </li>
+<li><strong>minSplits</strong> &#8211; </li>
+<li><strong>batchSize</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.setCheckpointDir">
+<code class="descname">setCheckpointDir</code><span class="sig-paren">(</span><em>dirName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.setCheckpointDir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.setCheckpointDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dirName</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.setJobGroup">
+<code class="descname">setJobGroup</code><span class="sig-paren">(</span><em>groupId</em>, <em>description</em>, <em>interruptOnCancel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.setJobGroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.setJobGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>groupId</strong> &#8211; </li>
+<li><strong>description</strong> &#8211; </li>
+<li><strong>interruptOnCancel</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.setLocalProperty">
+<code class="descname">setLocalProperty</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.setLocalProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.setLocalProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.setLogLevel">
+<code class="descname">setLogLevel</code><span class="sig-paren">(</span><em>logLevel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.setLogLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.setLogLevel" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>logLevel</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="dummy_spark.SparkContext.setSystemProperty">
+<em class="property">classmethod </em><code class="descname">setSystemProperty</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.setSystemProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.setSystemProperty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.show_profiles">
+<code class="descname">show_profiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.show_profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.show_profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.sparkUser">
+<code class="descname">sparkUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.sparkUser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.sparkUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.SparkContext.startTime">
+<code class="descname">startTime</code><a class="headerlink" href="#dummy_spark.SparkContext.startTime" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.statusTracker">
+<code class="descname">statusTracker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.statusTracker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.statusTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.stop" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.textFile">
+<code class="descname">textFile</code><span class="sig-paren">(</span><em>name</em>, <em>minPartitions=None</em>, <em>use_unicode=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.textFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.textFile" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8211; </li>
+<li><strong>minPartitions</strong> &#8211; </li>
+<li><strong>use_unicode</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.union">
+<code class="descname">union</code><span class="sig-paren">(</span><em>rdds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.union" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rdds</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.SparkContext.version">
+<code class="descname">version</code><a class="headerlink" href="#dummy_spark.SparkContext.version" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.SparkContext.wholeTextFiles">
+<code class="descname">wholeTextFiles</code><span class="sig-paren">(</span><em>path</em>, <em>minPartitions=None</em>, <em>use_unicode=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/context.html#SparkContext.wholeTextFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.SparkContext.wholeTextFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>minPartitions</strong> &#8211; </li>
+<li><strong>use_unicode</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyspark package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#module-dummy_spark">Contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Dummy Python API Docs!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dummy_spark.sql.html"
+                        title="next chapter">dummy_spark.sql module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/dummy_spark.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="dummy_spark.sql.html" title="dummy_spark.sql module"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Dummy Python API Docs!"
+             >previous</a> |</li>
+    
+        <li class="nav-item nav-item-0"><a href="index.html">DummySpark master documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

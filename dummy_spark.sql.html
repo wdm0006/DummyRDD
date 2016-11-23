@@ -1,0 +1,543 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dummy_spark.sql module &mdash; DummySpark master documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pyspark.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'master',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/pyspark.js"></script>
+    <link rel="top" title="DummySpark master documentation" href="index.html" />
+    <link rel="prev" title="dummy_spark.sql module" href="" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="#" title="dummy_spark.sql module"
+             accesskey="P">previous</a></li>
+    
+        <li class="nav-item nav-item-0"><a href="index.html">DummySpark master documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dummy-spark-sql-module">
+<h1>dummy_spark.sql module<a class="headerlink" href="#dummy-spark-sql-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-dummy_spark.sql">
+<span id="module-context"></span><h2>Module Context<a class="headerlink" href="#module-dummy_spark.sql" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dummy_spark.sql.SQLContext">
+<em class="property">class </em><code class="descclassname">dummy_spark.sql.</code><code class="descname">SQLContext</code><span class="sig-paren">(</span><em>parkContext</em>, <em>sqlContext=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="dummy_spark.sql.SQLContext.applySchema">
+<code class="descname">applySchema</code><span class="sig-paren">(</span><em>rdd</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.applySchema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.applySchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rdd</strong> &#8211; </li>
+<li><strong>schema</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.cacheTable">
+<code class="descname">cacheTable</code><span class="sig-paren">(</span><em>tableName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.cacheTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.cacheTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tableName</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.clearCache">
+<code class="descname">clearCache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.clearCache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.clearCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.createDataFrame">
+<code class="descname">createDataFrame</code><span class="sig-paren">(</span><em>data</em>, <em>schema=None</em>, <em>samplingRatio=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.createDataFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.createDataFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; </li>
+<li><strong>schema</strong> &#8211; </li>
+<li><strong>samplingRatio</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.createExternalTable">
+<code class="descname">createExternalTable</code><span class="sig-paren">(</span><em>tableName</em>, <em>path=None</em>, <em>source=None</em>, <em>schema=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.createExternalTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.createExternalTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tableName</strong> &#8211; </li>
+<li><strong>path</strong> &#8211; </li>
+<li><strong>source</strong> &#8211; </li>
+<li><strong>schema</strong> &#8211; </li>
+<li><strong>options</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.getConf">
+<code class="descname">getConf</code><span class="sig-paren">(</span><em>key</em>, <em>defaultValue</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.getConf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.getConf" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>defaultValue</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.inferSchema">
+<code class="descname">inferSchema</code><span class="sig-paren">(</span><em>rdd</em>, <em>samplingRatio=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.inferSchema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.inferSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rdd</strong> &#8211; </li>
+<li><strong>samplingRatio</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.jsonFile">
+<code class="descname">jsonFile</code><span class="sig-paren">(</span><em>path</em>, <em>schema=None</em>, <em>samplingRatio=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.jsonFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.jsonFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>schema</strong> &#8211; </li>
+<li><strong>samplingRatio</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.jsonRDD">
+<code class="descname">jsonRDD</code><span class="sig-paren">(</span><em>rdd</em>, <em>schema=None</em>, <em>samplingRatio=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.jsonRDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.jsonRDD" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rdd</strong> &#8211; </li>
+<li><strong>schema</strong> &#8211; </li>
+<li><strong>samplingRatio</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>path=None</em>, <em>source=None</em>, <em>schema=None</em>, <em>**options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; </li>
+<li><strong>source</strong> &#8211; </li>
+<li><strong>schema</strong> &#8211; </li>
+<li><strong>options</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.parquetFile">
+<code class="descname">parquetFile</code><span class="sig-paren">(</span><em>*paths</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.parquetFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.parquetFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>paths</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.range">
+<code class="descname">range</code><span class="sig-paren">(</span><em>start</em>, <em>end=None</em>, <em>step=1</em>, <em>numPartitions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start</strong> &#8211; </li>
+<li><strong>end</strong> &#8211; </li>
+<li><strong>step</strong> &#8211; </li>
+<li><strong>numPartitions</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dummy_spark.sql.SQLContext.read">
+<code class="descname">read</code><a class="headerlink" href="#dummy_spark.sql.SQLContext.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.registerDataFrameAsTable">
+<code class="descname">registerDataFrameAsTable</code><span class="sig-paren">(</span><em>df</em>, <em>tableName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.registerDataFrameAsTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.registerDataFrameAsTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> &#8211; </li>
+<li><strong>tableName</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.registerFunction">
+<code class="descname">registerFunction</code><span class="sig-paren">(</span><em>name</em>, <em>f</em>, <em>returnType=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.registerFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.registerFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8211; </li>
+<li><strong>f</strong> &#8211; </li>
+<li><strong>returnType</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.setConf">
+<code class="descname">setConf</code><span class="sig-paren">(</span><em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.setConf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.setConf" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> &#8211; </li>
+<li><strong>value</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.sql">
+<code class="descname">sql</code><span class="sig-paren">(</span><em>sqlQuery</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.sql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.sql" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sqlQuery</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.table">
+<code class="descname">table</code><span class="sig-paren">(</span><em>tableName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tableName</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.tableNames">
+<code class="descname">tableNames</code><span class="sig-paren">(</span><em>dbName=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.tableNames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.tableNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dbName</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.tables">
+<code class="descname">tables</code><span class="sig-paren">(</span><em>dbName=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dbName</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.udf">
+<code class="descname">udf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.udf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.udf" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dummy_spark.sql.SQLContext.uncacheTable">
+<code class="descname">uncacheTable</code><span class="sig-paren">(</span><em>tableName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dummy_spark/sql/sql_context.html#SQLContext.uncacheTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dummy_spark.sql.SQLContext.uncacheTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>NotImplemented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tableName</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dummy-spark-sql-types-module">
+<h2>dummy_spark.sql.types module<a class="headerlink" href="#dummy-spark-sql-types-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="dummy-spark-sql-functions-module">
+<h2>dummy_spark.sql.functions module<a class="headerlink" href="#dummy-spark-sql-functions-module" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">dummy_spark.sql module</a><ul>
+<li><a class="reference internal" href="#module-dummy_spark.sql">Module Context</a></li>
+<li><a class="reference internal" href="#dummy-spark-sql-types-module">dummy_spark.sql.types module</a></li>
+<li><a class="reference internal" href="#dummy-spark-sql-functions-module">dummy_spark.sql.functions module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href=""
+                        title="previous chapter">dummy_spark.sql module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/dummy_spark.sql.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="#" title="dummy_spark.sql module"
+             >previous</a></li>
+    
+        <li class="nav-item nav-item-0"><a href="index.html">DummySpark master documentation</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
