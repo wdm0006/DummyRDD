@@ -2,8 +2,14 @@
 
 from __future__ import print_function
 
+import gzip
 import time
 import sys
+
+try:
+    import cStringIO as StringIO
+except:
+    import StringIO
 
 from threading import Lock
 
@@ -49,10 +55,16 @@ class jvm(object):
                 secret_key = self.hc.get('fs.s3n.awsSecretAccessKey')
                 conn = tinys3.Connection(access_key, secret_key)
                 file = conn.get(key_name, bucket_name)
+                if file_name.endswith('.gz'):
+                    compressed = StringIO.StringIO(file.content)
+                    gzipper = gzip.GzipFile(fileobj=compressed) 
+                    return gzipper.readlines()
                 return file.content.decode('utf-8').split('\n')
             else:
                 raise Exception('Need TinyS3 to use s3 files')
         else:
+            if file_name.endswith('.gz'):
+                open = gzip.open
             with open(file_name, 'r') as f:
                 return f.readlines()
 
