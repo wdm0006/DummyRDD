@@ -64,8 +64,10 @@ class jvm(object):
                 raise Exception('Need TinyS3 to use s3 files')
         else:
             if file_name.endswith('.gz'):
-                open = gzip.open
-            with open(file_name, 'r') as f:
+                opener = gzip.open
+            else:
+                opener = open
+            with opener(file_name, 'r') as f:
                 return f.readlines()
 
 
