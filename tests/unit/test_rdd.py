@@ -381,9 +381,6 @@ class RDDTests (unittest.TestCase):
             rdd.fullOuterJoin(None, None)
 
         with self.assertRaises(NotImplementedError):
-            rdd.partitionBy(None, None)
-
-        with self.assertRaises(NotImplementedError):
             rdd.combineByKey(None, None, None, None)
 
         with self.assertRaises(NotImplementedError):
@@ -411,13 +408,7 @@ class RDDTests (unittest.TestCase):
             rdd.subtract(None, None)
 
         with self.assertRaises(NotImplementedError):
-            rdd.keyBy(None)
-
-        with self.assertRaises(NotImplementedError):
             rdd.coalesce(None, None)
-
-        with self.assertRaises(NotImplementedError):
-            rdd.zipWithUniqueId()
 
         with self.assertRaises(NotImplementedError):
             rdd.toDebugString()

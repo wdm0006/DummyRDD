@@ -889,13 +889,13 @@ class RDD(object):
 
     def partitionBy(self, numPartitions, partitionFunc=None):
         """
-        NotImplemented
 
         :param numPartitions:
         :param partitionFunc:
         :return:
         """
-        raise NotImplementedError
+
+        return self
 
     def combineByKey(self, createCombiner, mergeValue, mergeCombiners, numPartitions=None):
         """
@@ -991,12 +991,12 @@ class RDD(object):
 
     def keyBy(self, f):
         """
-        NotImplemented
 
         :param f:
         :return:
         """
-        raise NotImplementedError
+        data = [(f(x), x) for x in self._jrdd]
+        return RDD(data, self.ctx)
 
     def repartition(self, numPartitions):
         """
@@ -1018,11 +1018,11 @@ class RDD(object):
 
     def zipWithUniqueId(self):
         """
-        NotImplemented
 
         :return:
         """
-        raise NotImplementedError
+        data = [(b, a) for a, b in list(enumerate(self._jrdd))]
+        return RDD(data, self.ctx)
 
     def toDebugString(self):
         """
