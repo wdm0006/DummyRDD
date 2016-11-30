@@ -274,6 +274,13 @@ class RDDTests (unittest.TestCase):
         output = rdd.collect()
         self.assertEquals(sorted(output), sorted(expected_output))
 
+    def test_left_outer_join(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([('A', [1, 2, 3]), ('B', [2,3,4])])
+        rdd2 = sc.parallelize([('A', [1, 2, 3]), ('B', [2,3,4]), ('B', [4,5,6])])
+        out = rdd1.leftOuterJoin(rdd2).collect()
+        self.assertEqual(len(out), 3)
+
     def test_not_implemented_methods(self):
         sc = SparkContext(master='', conf=SparkConf())
         rdd = sc.parallelize([])
@@ -370,9 +377,6 @@ class RDDTests (unittest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             rdd.join(None, None)
-
-        with self.assertRaises(NotImplementedError):
-            rdd.leftOuterJoin(None, None)
 
         with self.assertRaises(NotImplementedError):
             rdd.rightOuterJoin(None, None)

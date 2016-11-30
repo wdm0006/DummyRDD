@@ -859,13 +859,14 @@ class RDD(object):
 
     def leftOuterJoin(self, other, numPartitions=None):
         """
-        NotImplemented
 
         :param other:
         :param numPartitions:
         :return:
         """
-        raise NotImplementedError
+
+        data = [(k, (v, dict(self._jrdd).get(k))) for k, v in other._jrdd]
+        return RDD(data, self.ctx)
 
     def rightOuterJoin(self, other, numPartitions=None):
         """
