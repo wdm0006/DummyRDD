@@ -57,7 +57,10 @@ class jvm(object):
                 key_name = file_name.replace(bucket_name, '')[1:]
                 access_key = self.hc.get('fs.s3n.awsAccessKeyId')
                 secret_key = self.hc.get('fs.s3n.awsSecretAccessKey')
-                conn = tinys3.Connection(access_key, secret_key)
+                region = self.hc.get('fs.s3n.endpoint')
+                if region is None:
+                    region = 's3.amazonaws.com'
+                conn = tinys3.Connection(access_key, secret_key, endpoint='s3.amazonaws.com')
                 file = conn.get(key_name, bucket_name)
                 if file_name.endswith('.gz'):
                     compressed = StringIO.StringIO(file.content)
