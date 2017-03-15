@@ -920,7 +920,17 @@ class RDD(object):
         :param numPartitions:
         :return:
         """
-        raise NotImplementedError
+
+        keys = {row[0] for row in self._jrdd}
+        new_data = []
+        for key in keys:
+            val = zeroValue
+            for row in self._jrdd:
+                if row[0] == key:
+                    val = seqFunc(val, row[1])
+            new_data.append((key, val))
+
+        return RDD(new_data, self.ctx)
 
     def foldByKey(self, zeroValue, func, numPartitions=None):
         """

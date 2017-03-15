@@ -388,9 +388,6 @@ class RDDTests (unittest.TestCase):
             rdd.combineByKey(None, None, None, None)
 
         with self.assertRaises(NotImplementedError):
-            rdd.aggregateByKey(None, None, None, None)
-
-        with self.assertRaises(NotImplementedError):
             rdd.foldByKey(None, None, None)
 
         with self.assertRaises(NotImplementedError):
