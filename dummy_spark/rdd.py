@@ -921,16 +921,11 @@ class RDD(object):
         :return:
         """
 
-        keys = {row[0] for row in self._jrdd}
-        new_data = []
-        for key in keys:
-            val = zeroValue
-            for row in self._jrdd:
-                if row[0] == key:
-                    val = seqFunc(val, row[1])
-            new_data.append((key, val))
+        new_data = {row[0]: zeroValue for row in self._jrdd}
+        for row in self._jrdd:
+            new_data[row[0]] = seqFunc(new_data[row[0]], row[1])
 
-        return RDD(new_data, self.ctx)
+        return RDD(list(new_data.items()), self.ctx)
 
     def foldByKey(self, zeroValue, func, numPartitions=None):
         """
