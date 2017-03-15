@@ -925,7 +925,9 @@ class RDD(object):
         for row in self._jrdd:
             new_data[row[0]] = seqFunc(new_data[row[0]], row[1])
 
-        return RDD(list(new_data.items()), self.ctx)
+        new_data = [(k, v) for k, v in new_data.items()]
+        rdd = RDD(new_data, self.ctx)
+        return rdd
 
     def foldByKey(self, zeroValue, func, numPartitions=None):
         """
