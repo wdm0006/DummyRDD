@@ -405,9 +405,9 @@ class RDD(object):
         """
         keys = {kv[0] for kv in self._jrdd}
         data = [(key, reduce(func, [kv[1] for kv in self._jrdd if kv[0] == key])) for key in keys]
+
         return RDD(data, self.ctx)
 
-    # TODO: support variant with custom partitioner
     def groupByKey(self, numPartitions=None):
         """
 
@@ -865,7 +865,11 @@ class RDD(object):
         :return:
         """
 
-        data = [(k, (dict(self._jrdd).get(k), v)) for k, v in other._jrdd]
+        result_dict = {}
+        for x in other._jrdd:
+            result_dict[x[0]] = result_dict.setdefault(x[0], []) + x[1]
+
+        data = [(k, (v, result_dict.get(k))) for k, v in self._jrdd]
         return RDD(data, self.ctx)
 
     def rightOuterJoin(self, other, numPartitions=None):
