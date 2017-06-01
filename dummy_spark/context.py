@@ -63,7 +63,7 @@ class jvm(object):
                 conn = tinys3.Connection(access_key, secret_key, endpoint=region)
                 file = conn.get(key_name, bucket_name)
                 if file_name.endswith('.gz'):
-                    compressed = StringIO.StringIO(file.content)
+                    compressed = StringIO(file.content)
                     gzipper = gzip.GzipFile(fileobj=compressed) 
                     return gzipper.readlines()
                 return file.content.decode('utf-8').split('\n')
