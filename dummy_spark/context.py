@@ -7,12 +7,12 @@ import time
 import sys
 
 if sys.version_info.major == 3:
-    from io import StringIO
+    from io import BytesIO as buffer
 elif sys.version_info.major == 2:
     try:
-        import cStringIO as StringIO
+        import cStringIO as buffer
     except ImportError:
-        import StringIO
+        import StringIO as buffer
 else:
     raise ValueError('Python %s not supported' % (sys.version_info.major, ))
 
@@ -63,7 +63,7 @@ class jvm(object):
                 conn = tinys3.Connection(access_key, secret_key, endpoint=region)
                 file = conn.get(key_name, bucket_name)
                 if file_name.endswith('.gz'):
-                    compressed = StringIO(file.content)
+                    compressed = buffer(file.content)
                     gzipper = gzip.GzipFile(fileobj=compressed) 
                     return gzipper.readlines()
                 return file.content.decode('utf-8').split('\n')
