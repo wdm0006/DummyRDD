@@ -2,7 +2,10 @@
 
 import random
 import uuid
+
+from collections import OrderedDict
 from functools import reduce
+
 from dummy_spark.resultsiterable import ResultIterable
 
 __author__ = 'willmcginnis'
@@ -820,7 +823,7 @@ class RDD(object):
         :return: A new RDD that contains only the original pair RDD keys
 
         """
-        return RDD(list(dict(self._jrdd).keys()), self.ctx)
+        return RDD(list(OrderedDict(self._jrdd).keys()), self.ctx)
 
     def values(self):
         """Get values of a pair RDD.
@@ -828,7 +831,7 @@ class RDD(object):
         :return: A new RDD that contains only the original pair RDD values
 
         """
-        return RDD(list(dict(self._jrdd).values()), self.ctx)
+        return RDD(list(OrderedDict(self._jrdd).values()), self.ctx)
 
     def reduceByKeyLocally(self, func):
         """
@@ -989,11 +992,18 @@ class RDD(object):
         :param numPartitions:
         :return: A new pair RDD with keys found in the other pair RDD removed.
         """
-        self_pairs = dict(self._jrdd)
+        self_pairs = OrderedDict(self._jrdd)
         other_pairs = dict(other._jrdd)
 
         new_keys = set(self_pairs.keys()) - set(other_pairs.keys())
-        return RDD([(key, self_pairs[key]) for key in new_keys], self.ctx)
+        return RDD(
+            [
+                (key, value)
+                for key, value in self_pairs.items()
+                if key in new_keys
+            ],
+            self.ctx,
+        )
 
     def subtract(self, other, numPartitions=None):
         """
