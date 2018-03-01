@@ -815,12 +815,12 @@ class RDD(object):
         raise NotImplementedError
 
     def keys(self):
-        """
-        NotImplemented
+        """Get keys of a pair RDD.
 
-        :return:
+        :return: A new RDD that contains only the original pair RDD keys
+
         """
-        raise NotImplementedError
+        return RDD(list(dict(self._jrdd).keys()), self.ctx)
 
     def values(self):
         """
