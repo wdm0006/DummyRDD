@@ -982,14 +982,18 @@ class RDD(object):
         raise NotImplementedError
 
     def subtractByKey(self, other, numPartitions=None):
-        """
+        """Remove the keys in a pair RDD found in another pair RDD.
         NotImplemented
 
-        :param other:
+        :param other: The pair RDD whose keys will be removed.
         :param numPartitions:
-        :return:
+        :return: A new pair RDD with keys found in the other pair RDD removed.
         """
-        raise NotImplementedError
+        self_pairs = dict(self._jrdd)
+        other_pairs = dict(other._jrdd)
+
+        new_keys = set(self_pairs.keys()) - set(other_pairs.keys())
+        return RDD([(key, self_pairs[key]) for key in new_keys], self.ctx)
 
     def subtract(self, other, numPartitions=None):
         """
