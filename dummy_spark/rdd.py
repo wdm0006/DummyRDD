@@ -823,12 +823,12 @@ class RDD(object):
         return RDD(list(dict(self._jrdd).keys()), self.ctx)
 
     def values(self):
-        """
-        NotImplemented
+        """Get values of a pair RDD.
 
-        :return:
+        :return: A new RDD that contains only the original pair RDD values
+
         """
-        raise NotImplementedError
+        return RDD(list(dict(self._jrdd).values()), self.ctx)
 
     def reduceByKeyLocally(self, func):
         """
