@@ -285,6 +285,23 @@ class RDDTests (unittest.TestCase):
         print(out)
         self.assertEqual(len(out), 2)
 
+    def test_keys(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
+        self.assertListEqual(rdd.keys().collect(), ['A', 'B', 'C'])
+
+    def test_values(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
+        self.assertListEqual(rdd.values().collect(), [1, 2, 3])
+
+    def test_subtractByKey(self):
+        """values method returns the values as expected."""
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
+        rdd2 = sc.parallelize([('A', None), ('C', None)])
+        self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('B', 2)])
+
     def test_not_implemented_methods(self):
         sc = SparkContext(master='', conf=SparkConf())
         rdd = sc.parallelize([])
@@ -368,12 +385,6 @@ class RDDTests (unittest.TestCase):
             rdd.collectAsMap()
 
         with self.assertRaises(NotImplementedError):
-            rdd.keys()
-
-        with self.assertRaises(NotImplementedError):
-            rdd.values()
-
-        with self.assertRaises(NotImplementedError):
             rdd.reduceByKeyLocally(None)
 
         with self.assertRaises(NotImplementedError):
@@ -405,9 +416,6 @@ class RDDTests (unittest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             rdd.sampleByKey(None, None, None)
-
-        with self.assertRaises(NotImplementedError):
-            rdd.subtractByKey(None, None)
 
         with self.assertRaises(NotImplementedError):
             rdd.subtract(None, None)
