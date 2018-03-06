@@ -906,16 +906,58 @@ class RDD(object):
         return self
 
     def combineByKey(self, createCombiner, mergeValue, mergeCombiners, numPartitions=None):
-        """
-        NotImplemented
+        """Generic function to combine the elements for each key using a custom set of aggregation functions.
+
+        Turns an RDD[(K, V)] into a result of type RDD[(K, C)], for a "combined
+        type" C.
 
         :param createCombiner:
+            which turns a V into a C (e.g., creates a one-element list)
         :param mergeValue:
+            to merge a V into a C (e.g., adds it to the end of a list)
         :param mergeCombiners:
+            to combine two C’s into a single one (e.g., merges the lists)
         :param numPartitions:
         :return:
         """
-        raise NotImplementedError
+        # numPartitions is ignored for now
+        # data is split into two partitions anyway,
+        # to exercise the mergeCombiners function
+        split_point = len(self._jrdd) // 2
+        partitions = [
+            self._jrdd[:split_point],
+            self._jrdd[split_point:],
+        ]
+
+        def combine_partition_by_key(partition):
+            """Combine all values in a given partition."""
+            pairs = OrderedDict()
+            for key, value in partition:
+                if key not in pairs:
+                    pairs[key] = createCombiner(value)
+                else:
+                    pairs[key] = mergeValue(pairs[key], value)
+            return pairs
+
+        combined_partitions = [
+            combine_partition_by_key(partition)
+            for partition in partitions
+        ]
+
+        def merge_combined_partitions(partition_a, partition_b):
+            """Merge all values between two partitions."""
+            merged_partition = partition_a.copy()
+            for key, combiner_b in partition_b.items():
+                if key not in partition_a:
+                    merged_partition[key] = combiner_b
+                else:
+                    combiner_a = partition_a[key]
+                    merged_partition[key] = mergeCombiners(
+                        combiner_a, combiner_b)
+            return merged_partition
+
+        data = reduce(merge_combined_partitions, combined_partitions)
+        return RDD(list(data.items()), self.ctx)
 
     def aggregateByKey(self, zeroValue, seqFunc, combFunc, numPartitions=None):
         """
