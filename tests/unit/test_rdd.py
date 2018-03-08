@@ -295,8 +295,35 @@ class RDDTests (unittest.TestCase):
         rdd = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
         self.assertListEqual(rdd.values().collect(), [1, 2, 3])
 
+    def test_combineByKey(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = sc.parallelize([
+            ('A', 1),
+            ('B', 2),
+            ('B', 3),
+            ('C', 4),
+            ('C', 5),
+            ('A', 6),
+        ])
+
+        def create_combiner(a):
+            return [a]
+
+        def merge_value(a, b):
+            a.append(b)
+            return a
+
+        def merge_combiners(a, b):
+            a.extend(b)
+            return a
+
+        rdd = rdd.combineByKey(create_combiner, merge_value, merge_combiners)
+        self.assertListEqual(
+            rdd.collect(),
+            [('A', [1, 6]), ('B', [2, 3]), ('C', [4, 5])],
+        )
+
     def test_subtractByKey(self):
-        """values method returns the values as expected."""
         sc = SparkContext(master='', conf=SparkConf())
         rdd1 = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
         rdd2 = sc.parallelize([('A', None), ('C', None)])
@@ -398,9 +425,6 @@ class RDDTests (unittest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             rdd.fullOuterJoin(None, None)
-
-        with self.assertRaises(NotImplementedError):
-            rdd.combineByKey(None, None, None, None)
 
         with self.assertRaises(NotImplementedError):
             rdd.foldByKey(None, None, None)
