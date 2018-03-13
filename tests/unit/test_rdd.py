@@ -323,6 +323,68 @@ class RDDTests (unittest.TestCase):
             [('A', [1, 6]), ('B', [2, 3]), ('C', [4, 5])],
         )
 
+    def test_sortByKey_ascending(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([
+                ('e', 5),
+                ('d', 4),
+                ('c', 3),
+                ('b', 2),
+                ('a', 1),
+            ])
+            .sortByKey(ascending=True)
+        )
+        self.assertListEqual(
+            rdd.collect(),
+            [
+                ('a', 1),
+                ('b', 2),
+                ('c', 3),
+                ('d', 4),
+                ('e', 5),
+            ],
+        )
+
+    def test_sortByKey_descending(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([
+                ('a', 1),
+                ('b', 2),
+                ('c', 3),
+                ('d', 4),
+                ('e', 5),
+            ])
+            .sortByKey(ascending=False)
+        )
+        self.assertListEqual(
+            rdd.collect(),
+            [
+                ('e', 5),
+                ('d', 4),
+                ('c', 3),
+                ('b', 2),
+                ('a', 1),
+            ],
+        )
+
+    def test_sortBy_ascending(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([5, 4, 3, 2, 1])
+            .sortBy(lambda x: x, ascending=True)
+        )
+        self.assertListEqual(rdd.collect(), [1, 2, 3, 4, 5])
+
+    def test_sortBy_descending(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([1, 2, 3, 4, 5])
+            .sortBy(lambda x: x, ascending=False)
+        )
+        self.assertListEqual(rdd.collect(), [5, 4, 3, 2, 1])
+
     def test_subtractByKey(self):
         sc = SparkContext(master='', conf=SparkConf())
         rdd1 = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
