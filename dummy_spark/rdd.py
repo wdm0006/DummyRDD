@@ -294,7 +294,7 @@ class RDD(object):
         :param keyfunc:
         :return:
         """
-        data = sorted(self._jrdd, key=keyfunc, reverse=ascending)
+        data = sorted(self._jrdd, key=keyfunc, reverse=not ascending)
         return RDD(data, self.ctx)
 
     def sortBy(self, keyfunc, ascending=True, numPartitions=None):
@@ -305,7 +305,7 @@ class RDD(object):
         :param numPartitions:
         :return:
         """
-        data = sorted(self._jrdd, key=keyfunc, reverse=ascending)
+        data = sorted(self._jrdd, key=keyfunc, reverse=not ascending)
         return RDD(data, self.ctx)
 
     def glom(self):
