@@ -398,7 +398,7 @@ class SparkContext(object):
                 if '_source' in dat.keys():
                     cleaned_data.append((dat.get('_id'), dat.get('_source', {})))
                 elif 'fields' in dat.keys():
-                    cleaned_data.append((dat.get('_id'), dat.get('fields')))
+                    cleaned_data.append((dat.get('_id'), {k: v[0] for k,v in dat.get('fields').items()}))
 
             rdd = RDD(cleaned_data, self, None)
 
