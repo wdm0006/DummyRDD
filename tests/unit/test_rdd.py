@@ -385,6 +385,30 @@ class RDDTests (unittest.TestCase):
         )
         self.assertListEqual(rdd.collect(), [5, 4, 3, 2, 1])
 
+    def test_repartitionAndSortWithinPartitions_ascending(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([5, 4, 3, 2, 1])
+            .repartitionAndSortWithinPartitions(ascending=True)
+        )
+        self.assertListEqual(rdd.collect(), [1, 2, 3, 4, 5])
+
+    def test_repartitionAndSortWithinPartitions_descending(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([1, 2, 3, 4, 5])
+            .repartitionAndSortWithinPartitions(ascending=False)
+        )
+        self.assertListEqual(rdd.collect(), [5, 4, 3, 2, 1])
+
+    def test_repartitionAndSortWithinPartitions_keyfunc(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = (
+            sc.parallelize([('a', 3), ('b', 1), ('c', 2)])
+            .repartitionAndSortWithinPartitions(ascending=True, keyfunc=lambda x: x[1])
+        )
+        self.assertListEqual(rdd.collect(), [('b', 1), ('c', 2), ('a', 3)])
+
     def test_subtractByKey(self):
         sc = SparkContext(master='', conf=SparkConf())
         rdd1 = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
