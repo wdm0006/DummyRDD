@@ -391,6 +391,36 @@ class RDDTests (unittest.TestCase):
         rdd2 = sc.parallelize([('A', None), ('C', None)])
         self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('B', 2)])
 
+    def test_take_sample_with_replacement(self):
+        for start, stop, step in self.TEST_RANGES:
+            l = list(range(start, stop, step))
+            rdd = RDD(l, self.SPARK_CONTEXT)
+            num = min(len(l), 5)
+            sample = rdd.takeSample(True, num)
+            self.assertEqual(len(sample), num)
+            for item in sample:
+                self.assertTrue(item in l)
+
+    def test_take_sample_without_replacement(self):
+        for start, stop, step in self.TEST_RANGES:
+            l = list(range(start, stop, step))
+            rdd = RDD(l, self.SPARK_CONTEXT)
+            num = min(len(l), 5)
+            sample = rdd.takeSample(False, num)
+            self.assertEqual(len(sample), num)
+            self.assertEqual(len(sample), len(set(sample)))
+            for item in sample:
+                self.assertTrue(item in l)
+
+    def test_zip(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([1, 2, 3, 4, 5])
+        rdd2 = sc.parallelize([10, 20, 30, 40, 50])
+        self.assertListEqual(
+            rdd1.zip(rdd2).collect(),
+            [(1, 10), (2, 20), (3, 30), (4, 40), (5, 50)]
+        )
+
     def test_not_implemented_methods(self):
         sc = SparkContext(master='', conf=SparkConf())
         rdd = sc.parallelize([])
