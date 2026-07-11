@@ -240,7 +240,7 @@ class RDD(object):
             random.seed(seed)
 
         if withReplacement:
-            out = [self._jrdd[random.choice(list(range(len(self._jrdd))))] for _ in num]
+            out = [self._jrdd[random.choice(list(range(len(self._jrdd))))] for _ in range(num)]
         else:
             idx_list = list(range(len(self._jrdd)))
             random.shuffle(idx_list)
@@ -466,7 +466,7 @@ class RDD(object):
         :param other:
         :return:
         """
-        data = list(zip(other, self._jrdd))
+        data = list(zip(self._jrdd, other._jrdd))
         return RDD(data, self.ctx)
 
     def zipWithIndex(self):
