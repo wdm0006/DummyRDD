@@ -283,7 +283,7 @@ class RDD(object):
         :param keyfunc:
         :return:
         """
-        data = sorted(self._jrdd, key=keyfunc, reverse=ascending)
+        data = sorted(self._jrdd, key=keyfunc, reverse=not ascending)
         return RDD(data, self.ctx)
 
     def sortByKey(self, ascending=True, numPartitions=None, keyfunc=lambda x: x):
