@@ -869,10 +869,16 @@ class RDD(object):
         """
 
         result_dict = {}
-        for x in other._jrdd:
-            result_dict[x[0]] = result_dict.setdefault(x[0], []) + x[1]
+        for key, value in other._jrdd:
+            result_dict.setdefault(key, []).append(value)
 
-        data = [(k, (v, result_dict.get(k))) for k, v in self._jrdd]
+        data = []
+        for key, value in self._jrdd:
+            matches = result_dict.get(key)
+            if matches is None:
+                data.append((key, (value, None)))
+            else:
+                data.extend((key, (value, match)) for match in matches)
         return RDD(data, self.ctx)
 
     def rightOuterJoin(self, other, numPartitions=None):
