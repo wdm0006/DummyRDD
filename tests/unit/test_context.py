@@ -29,31 +29,31 @@ class SparkContextTests (unittest.TestCase):
     def test_empty_RDD(self):
         ctx = SparkContext()
         rdd = ctx.emptyRDD()
-        self.assertEquals(type(rdd), RDD)
+        self.assertEqual(type(rdd), RDD)
         l = rdd.collect()
         self.assertEqual(type(l), list)
-        self.assertEquals(len(l), 0)
+        self.assertEqual(len(l), 0)
 
     def test_range(self):
         ctx = SparkContext()
         for start, stop, step in self.TEST_RANGES:
             l = list(range(start, stop, step))
             rdd = ctx.range(start, stop, step)
-            self.assertEquals(l, rdd.collect())
+            self.assertEqual(l, rdd.collect())
 
     def test_parallelize_list(self):
         ctx = SparkContext()
         for start, stop, step in self.TEST_RANGES:
             l = list(range(start, stop, step))
             rdd = ctx.parallelize(l)
-            self.assertEquals(l, rdd.collect())
+            self.assertEqual(l, rdd.collect())
 
     def test_parallelize_set(self):
         ctx = SparkContext()
         for start, stop, step in self.TEST_RANGES:
             l = list(range(start, stop, step))
             rdd = ctx.parallelize(set(l))
-            self.assertEquals(sorted(l), sorted(rdd.collect()))
+            self.assertEqual(sorted(l), sorted(rdd.collect()))
 
     def test_text_file(self):
         ctx = SparkContext()
@@ -65,11 +65,11 @@ class SparkContextTests (unittest.TestCase):
                 f.flush()
                 f.seek(0)
                 rdd = ctx.textFile(f.name)
-                self.assertEquals(l, rdd.collect())
+                self.assertEqual(l, rdd.collect())
 
     def test_version(self):
         ctx = SparkContext()
-        self.assertEquals(ctx.version, SparkContext.DUMMY_VERSION)
+        self.assertEqual(ctx.version, SparkContext.DUMMY_VERSION)
 
     def test_with_block(self):
         with SparkContext():
@@ -86,7 +86,7 @@ class SparkContextTests (unittest.TestCase):
         jvm = ctx._jsc
         hc = jvm.hadoopConfiguration()
         hc.set('key', 'value')
-        self.assertEquals(hc.get('key'), 'value')
+        self.assertEqual(hc.get('key'), 'value')
 
     def test_not_implemented_methods(self):
         ctx = SparkContext()
