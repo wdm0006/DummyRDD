@@ -279,11 +279,27 @@ class RDDTests (unittest.TestCase):
 
     def test_left_outer_join(self):
         sc = SparkContext(master='', conf=SparkConf())
-        rdd1 = sc.parallelize([('A', [1, 2, 3]), ('B', [2,3,4])])
-        rdd2 = sc.parallelize([('A', [1, 2, 3]), ('B', [2,3,4]), ('B', [4,5,6])])
-        out = rdd1.leftOuterJoin(rdd2).collect()
-        print(out)
-        self.assertEqual(len(out), 2)
+        left = sc.parallelize([
+            ('A', 1),
+            ('A', 2),
+            ('B', 3),
+            ('C', [4, 5]),
+        ])
+        right = sc.parallelize([
+            ('A', 10),
+            ('A', 20),
+            ('C', [6, 7]),
+            ('D', 30),
+        ])
+
+        self.assertListEqual(left.leftOuterJoin(right).collect(), [
+            ('A', (1, 10)),
+            ('A', (1, 20)),
+            ('A', (2, 10)),
+            ('A', (2, 20)),
+            ('B', (3, None)),
+            ('C', ([4, 5], [6, 7])),
+        ])
 
     def test_keys(self):
         sc = SparkContext(master='', conf=SparkConf())
@@ -571,6 +587,5 @@ class RDDTests (unittest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             rdd._to_java_object_rdd()
-
 
 
