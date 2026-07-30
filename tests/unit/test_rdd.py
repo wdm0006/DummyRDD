@@ -303,13 +303,19 @@ class RDDTests (unittest.TestCase):
 
     def test_keys(self):
         sc = SparkContext(master='', conf=SparkConf())
-        rdd = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
-        self.assertListEqual(rdd.keys().collect(), ['A', 'B', 'C'])
+        rdd = sc.parallelize([('A', 1), ('A', 2), ('B', 3), ('A', 4)])
+        self.assertListEqual(rdd.keys().collect(), ['A', 'A', 'B', 'A'])
 
     def test_values(self):
         sc = SparkContext(master='', conf=SparkConf())
-        rdd = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
-        self.assertListEqual(rdd.values().collect(), [1, 2, 3])
+        rdd = sc.parallelize([('A', 1), ('A', 2), ('B', 3), ('A', 4)])
+        self.assertListEqual(rdd.values().collect(), [1, 2, 3, 4])
+
+    def test_lookup(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd = sc.parallelize([('A', 1), ('A', 2), ('B', 3), ('A', 4)])
+        self.assertListEqual(rdd.lookup('A'), [1, 2, 4])
+        self.assertListEqual(rdd.lookup('missing'), [])
 
     def test_combineByKey(self):
         sc = SparkContext(master='', conf=SparkConf())

@@ -490,7 +490,7 @@ class RDD(object):
         :param key:
         :return:
         """
-        return [x for x in self._jrdd if x[0] == key]
+        return [value for pair_key, value in self._jrdd if pair_key == key]
 
     def countApprox(self, timeout, confidence=0.95):
         """
@@ -823,7 +823,7 @@ class RDD(object):
         :return: A new RDD that contains only the original pair RDD keys
 
         """
-        return RDD(list(OrderedDict(self._jrdd).keys()), self.ctx)
+        return RDD([key for key, _ in self._jrdd], self.ctx)
 
     def values(self):
         """Get values of a pair RDD.
@@ -831,7 +831,7 @@ class RDD(object):
         :return: A new RDD that contains only the original pair RDD values
 
         """
-        return RDD(list(OrderedDict(self._jrdd).values()), self.ctx)
+        return RDD([value for _, value in self._jrdd], self.ctx)
 
     def reduceByKeyLocally(self, func):
         """
