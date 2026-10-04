@@ -261,7 +261,10 @@ class RDD(object):
         :param other:
         :return:
         """
-        data = [item for item in self._jrdd if item in other._jrdd]
+        data = []
+        for item in self._jrdd:
+            if item in other._jrdd and item not in data:
+                data.append(item)
         return RDD(data, self.ctx)
 
     def __add__(self, other):
