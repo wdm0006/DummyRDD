@@ -160,6 +160,14 @@ class RDDTests (unittest.TestCase):
                 rdd = rdd1.intersection(rdd2)
                 self.assertEqual(sorted(rdd.collect()), sorted([x for x in l1 if x in l2]))
 
+    def test_intersection_deduplicates_values(self):
+        rdd1 = RDD([1, 1, 2, 3], self.SPARK_CONTEXT)
+        rdd2 = RDD([1, 2, 2], self.SPARK_CONTEXT)
+        for left, right in ((rdd1, rdd2), (rdd2, rdd1)):
+            result = left.intersection(right).collect()
+            self.assertEqual(sorted(result), [1, 2])
+            self.assertEqual(len(result), 2)
+
     def test_group_by_key(self):
         l = [(1, 1), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3)]
         rdd = RDD(l, self.SPARK_CONTEXT)
