@@ -445,6 +445,18 @@ class RDDTests (unittest.TestCase):
         rdd2 = sc.parallelize([('A', None), ('C', None)])
         self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('B', 2)])
 
+    def test_subtractByKey_preserves_duplicate_retained_keys(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([('a', 1), ('b', 3), ('a', 2), ('a', 1)])
+        rdd2 = sc.parallelize([('b', None)])
+        self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('a', 1), ('a', 2), ('a', 1)])
+
+    def test_subtractByKey_removes_all_duplicate_removed_keys(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([('x', 1), ('y', 2), ('x', 3), ('z', 4), ('y', 5)])
+        rdd2 = sc.parallelize([('x', 'p'), ('x', 'q'), ('y', 'r')])
+        self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('z', 4)])
+
     def test_take_sample_with_replacement(self):
         for start, stop, step in self.TEST_RANGES:
             l = list(range(start, stop, step))
