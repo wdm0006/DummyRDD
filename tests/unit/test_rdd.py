@@ -160,6 +160,14 @@ class RDDTests (unittest.TestCase):
                 rdd = rdd1.intersection(rdd2)
                 self.assertEqual(sorted(rdd.collect()), sorted([x for x in l1 if x in l2]))
 
+    def test_intersection_deduplicates_values(self):
+        rdd1 = RDD([1, 1, 2, 3], self.SPARK_CONTEXT)
+        rdd2 = RDD([1, 2, 2], self.SPARK_CONTEXT)
+        for left, right in ((rdd1, rdd2), (rdd2, rdd1)):
+            result = left.intersection(right).collect()
+            self.assertEqual(sorted(result), [1, 2])
+            self.assertEqual(len(result), 2)
+
     def test_group_by_key(self):
         l = [(1, 1), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3)]
         rdd = RDD(l, self.SPARK_CONTEXT)
@@ -436,6 +444,18 @@ class RDDTests (unittest.TestCase):
         rdd1 = sc.parallelize([('A', 1), ('B', 2), ('C', 3)])
         rdd2 = sc.parallelize([('A', None), ('C', None)])
         self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('B', 2)])
+
+    def test_subtractByKey_preserves_duplicate_retained_keys(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([('a', 1), ('b', 3), ('a', 2), ('a', 1)])
+        rdd2 = sc.parallelize([('b', None)])
+        self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('a', 1), ('a', 2), ('a', 1)])
+
+    def test_subtractByKey_removes_all_duplicate_removed_keys(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        rdd1 = sc.parallelize([('x', 1), ('y', 2), ('x', 3), ('z', 4), ('y', 5)])
+        rdd2 = sc.parallelize([('x', 'p'), ('x', 'q'), ('y', 'r')])
+        self.assertListEqual(rdd1.subtractByKey(rdd2).collect(), [('z', 4)])
 
     def test_take_sample_with_replacement(self):
         for start, stop, step in self.TEST_RANGES:

@@ -261,7 +261,10 @@ class RDD(object):
         :param other:
         :return:
         """
-        data = [item for item in self._jrdd if item in other._jrdd]
+        data = []
+        for item in self._jrdd:
+            if item in other._jrdd and item not in data:
+                data.append(item)
         return RDD(data, self.ctx)
 
     def __add__(self, other):
@@ -1040,18 +1043,8 @@ class RDD(object):
         :param numPartitions:
         :return: A new pair RDD with keys found in the other pair RDD removed.
         """
-        self_pairs = OrderedDict(self._jrdd)
-        other_pairs = dict(other._jrdd)
-
-        new_keys = set(self_pairs.keys()) - set(other_pairs.keys())
-        return RDD(
-            [
-                (key, value)
-                for key, value in self_pairs.items()
-                if key in new_keys
-            ],
-            self.ctx,
-        )
+        other_keys = set(key for key, _ in other._jrdd)
+        return RDD([pair for pair in self._jrdd if pair[0] not in other_keys], self.ctx)
 
     def subtract(self, other, numPartitions=None):
         """
