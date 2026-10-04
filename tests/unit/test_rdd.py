@@ -487,6 +487,23 @@ class RDDTests (unittest.TestCase):
             [(1, 10), (2, 20), (3, 30), (4, 40), (5, 50)]
         )
 
+    def test_aggregateByKey_isolates_mutable_accumulators(self):
+        sc = SparkContext(master='', conf=SparkConf())
+        zero = []
+
+        def seq(acc, value):
+            acc.append(value)
+            return acc
+
+        def comb(a, b):
+            return a + b
+
+        rdd = sc.parallelize([('a', 1), ('b', 2), ('a', 3)])
+        result = dict(rdd.aggregateByKey(zero, seq, comb).collect())
+
+        self.assertEqual(result, {'a': [1, 3], 'b': [2]})
+        self.assertEqual(zero, [])
+
     def test_not_implemented_methods(self):
         sc = SparkContext(master='', conf=SparkConf())
         rdd = sc.parallelize([])
