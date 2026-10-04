@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import copy
 import random
 import uuid
 
@@ -979,7 +980,7 @@ class RDD(object):
         :return:
         """
 
-        new_data = {row[0]: zeroValue for row in self._jrdd}
+        new_data = {row[0]: copy.deepcopy(zeroValue) for row in self._jrdd}
         for row in self._jrdd:
             new_data[row[0]] = seqFunc(new_data[row[0]], row[1])
 
