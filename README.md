@@ -37,6 +37,20 @@ but maybe not actually doing anything (in the case of irrelevant configuration o
 Currently there is no support for the dataframe api, or for that matter most features of anything, very much
 still a work in progress.
 
+Status, scope and alternatives
+------------------------------
+
+DummyRDD is an alpha, maintenance-only, pure Python test double for legacy RDD-API
+code that needs JVM-free unit tests. Bug fixes are in scope; new API coverage is not.
+DataFrames/SQL, distributed execution semantics and Spark Connect are non-goals;
+`SQLContext` is an import-compatible stub whose operations raise `NotImplementedError`.
+Execution is eager and single-partition, and some methods return lists where PySpark
+returns RDDs (for example, `glom`). Always verify workloads on real Spark.
+For real RDD/DataFrame/SQL behavior, use [PySpark local mode](https://spark.apache.org/docs/latest/rdd-programming-guide.html#initializing-spark),
+which [requires Java](https://spark.apache.org/docs/latest/api/python/getting_started/install.html#dependencies).
+For JVM-free DataFrame/SQL tests, consider [Sparkless](https://github.com/eddiethedean/robin-sparkless), checking its API coverage and caveats.
+[Spark Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html#what-is-supported) supports DataFrame APIs but does not support RDDs.
+
 Example
 -------
 
